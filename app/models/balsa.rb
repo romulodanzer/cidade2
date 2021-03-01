@@ -13,25 +13,7 @@ class Balsa < ActiveRecord::Base
 	validates_uniqueness_of :name
       accepts_nested_attributes_for :carregamentos, :reject_if => lambda { |a| a[:content].blank? }, :allow_destroy => true
 	
-	#attr_acessor :name, :carregamento_ids, :imo, :tonelagem_bruta, :comprimento, :largura, :calado, :arquiacao, :capacidade, :balsaid,
-	  :casc_e_est_validade_total,
-      :casc_e_est_classificacao_inicial,
-      :casc_e_est_manutencao_de_classe_mc1_abertura,
-      :casc_e_est_manutencao_de_classe_mc1_fechamento,
-      :casc_e_est_manutencao_de_classe_mc1_realizado,
-      :casc_e_est_manutencao_de_classe_mc1_anexo,
-      :casc_e_est_manutencao_de_classe_mc2_abertura,
-      :casc_e_est_manutencao_de_classe_mc2_fechamento,
-      :casc_e_est_manutencao_de_classe_mc2_realizado,
-      :casc_e_est_manutencao_de_classe_mc2_anexo,
-      :casc_e_est_manutencao_de_classe_mc3_abertura,
-      :casc_e_est_manutencao_de_classe_mc3_fechamento,
-      :casc_e_est_manutencao_de_classe_mc3_realizado,
-      :casc_e_est_manutencao_de_classe_mc3_anexo,
-      :casc_e_est_renovacao_de_classe_abertura,
-      :casc_e_est_renovacao_de_classe_fechamento,
-      :casc_e_est_renovacao_de_classe_realizado,
-      :casc_e_est_renovacao_de_classe_anexo 
+      #attr_acessor :name, :carregamento_ids, :imo, :tonelagem_bruta, :comprimento, :largura, :calado, :arquiacao, :capacidade, :balsaid,:casc_e_est_validade_total,:casc_e_est_classificacao_inicial,:casc_e_est_manutencao_de_classe_mc1_abertura,:casc_e_est_manutencao_de_classe_mc1_fechamento,:casc_e_est_manutencao_de_classe_mc1_realizado,:casc_e_est_manutencao_de_classe_mc1_anexo,:casc_e_est_manutencao_de_classe_mc2_abertura,:casc_e_est_manutencao_de_classe_mc2_fechamento,:casc_e_est_manutencao_de_classe_mc2_realizado,:casc_e_est_manutencao_de_classe_mc2_anexo,:casc_e_est_manutencao_de_classe_mc3_abertura,:casc_e_est_manutencao_de_classe_mc3_fechamento,:casc_e_est_manutencao_de_classe_mc3_realizado,:casc_e_est_manutencao_de_classe_mc3_anexo,:casc_e_est_renovacao_de_classe_abertura,:casc_e_est_renovacao_de_classe_fechamento,:casc_e_est_renovacao_de_classe_realizado,:casc_e_est_renovacao_de_classe_anexo 
 
   has_attached_file :casc_e_est_renovacao_de_classe_anexo
   validates_attachment_content_type :casc_e_est_renovacao_de_classe_anexo, content_type: %w(image/jpeg image/gif image/png application/pdf)

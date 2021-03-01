@@ -7,6 +7,32 @@
 // For example, to change the sidebar width:
 // $sidebar-width: 242px;
 
+body.active_admin {
+  .status_tag.verde {
+    background: #1bf286;
+  }
+  .status_tag.azul {
+    background: #1b1bf2;
+  }
+  .status_tag.amarelo {
+    background: #f2f21b;
+  }
+  .status_tag.vermelho {
+    background: #f21b1b;
+  }
+  .status_tag.ok {
+    background: #076f3b;
+  }
+  .status_tag.blue {
+    background: #1b1bf2;
+  }
+  .status_tag.warning {
+    background: #97970a;
+  }
+  .status_tag.error {
+    background: #b81111;
+  }
+}
 // Active Admin's got SASS!
 @import "active_admin/mixins";
 @import "active_admin/base";
