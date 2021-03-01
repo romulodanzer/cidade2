@@ -1,6 +1,8 @@
 require_relative 'boot'
 require 'rails/all'
 require 'font-awesome-sass'
+require 'csv'
+require 'iconv'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

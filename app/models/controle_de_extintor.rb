@@ -5,37 +5,59 @@ class ControleDeExtintor < ActiveRecord::Base
     :mangueira, :difusor, :manometro, :gatilho, :lacre, :trava, :piso, :placa, :proxima_recarga, :fabricante, :tecnico
    
     def self.import(file)
+      @erros = []
+      @total = 0
       spreadsheet = open_spreadsheet(file)
       header = spreadsheet.row(2)
       (3..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
-      extintor = ControleDeExtintor.find_by(numero_do_registro: row["Selo do In Metro"], created_at: row["Data da inspeção"]) || ControleDeExtintor.new
-      #extintor.attributes = row.to_hash.slice(*extintor.accessible_attributes)
-      extintor.embarcacao = row["Embarcação"]
-      extintor.tipo_de_embarcacao = "BM"
-      extintor.numero_do_registro = row["Selo do In Metro"]
-      extintor.numero_interno = row["Nº do Extintor "] 
-      extintor.setor = row["Localização"]
-      extintor.capacidade = row["capacidade extintora KGs"]
-      extintor.mangueira = "OK"
-      extintor.difusor = "OK"
-      extintor.manometro = "OK"
-      extintor.gatilho = "OK"
-      extintor.lacre = "OK"
-      extintor.trava = "OK"
-      extintor.placa = "OK"
-      extintor.proxima_recarga = row["Próxima Manutenção                   ( recarga )"]
-      extintor.fabricante = row["Fabricante"]
-      extintor.tecnico = "Importado via excel"
-      extintor.save!
+        row = Hash[[header, spreadsheet.row(i)].transpose]
+        #extintor.attributes = row.to_hash.slice(*extintor.accessible_attributes)
+        if !row["Selo do In Metro"].blank? && !row["Selo do In Metro"].blank? && !row["Embacarcao"].blank? && !row["Embacarcao"].blank? && !row["Tipo"].blank? && !row["Selo do In Metro"].blank? && !row["N do Extintor"].blank? && !row["Localizacao"].blank? && !row["capacidade extintora KGs"].blank? && !row["Proxima Manutencao-recarga"].blank? && !row["Fabricante"].blank? && !row["Data da inspecao"].blank? == true
+          if row["Piso"].blank?
+            @piso = "OK"
+            else
+            @piso = row["Piso"]
+          end
+          
+          if row["Placa"].blank?
+            @placa = "OK"
+            else
+            @placa = row["Placa"]
+          end
+
+          extintor = ControleDeExtintor.find_or_create_by!(numero_do_registro: row["Selo do In Metro"],
+                                                        embarcacao: row["Embacarcao"],
+                                                        tipo_de_embarcacao: "BM",
+                                                        tipo: row["Tipo"],
+                                                        numero_do_registro: row["Selo do In Metro"],
+                                                        numero_interno: row["N do Extintor"],
+                                                        setor: row["Localizacao"],
+                                                        capacidade: row["capacidade extintora KGs"],
+                                                        mangueira: "OK",
+                                                        difusor: "OK",
+                                                        manometro: "OK",
+                                                        gatilho: "OK",
+                                                        lacre: "OK",
+                                                        piso: @piso,
+                                                        placa: @placa,
+                                                        trava: "OK",
+                                                        proxima_recarga: row["Proxima Manutencao-recarga"],
+                                                        fabricante: row["Fabricante"],
+                                                        tecnico: "Importado via excel",
+                                                        created_at: row["Data da inspecao"])
+                                                        @total += 1
+        else
+          @erros << i
+        end
       end
    end
   
   def self.open_spreadsheet(file)
       case File.extname(file.original_filename)
-      when "*.xls" then Roo::Spreadsheet.open(file.path)
-      when "*.xlsx" then Roo::Spreadsheet.open(file.path)
-      else raise "Tipo de arquivo desconhecido: #{file.original_filename}"
+      when ".xls" then Roo::Spreadsheet.open(file.path)
+      when ".xlsx" then Roo::Spreadsheet.open(file.path)
+      else 
+        raise "Tipo de arquivo desconhecido: #{file.original_filename}"
       end
   end
   
@@ -49,5 +71,5 @@ class ControleDeExtintor < ActiveRecord::Base
     scope :vencidos, -> { where("proxima_recarga < ?", Date.today) }
     scope :vencimento_proximo, -> { where("proxima_recarga > ? and proxima_recarga < ?",Date.today, Date.today+30.days) }
   
-  end
+end
   
