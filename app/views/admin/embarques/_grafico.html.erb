@@ -1,0 +1,373 @@
+<% if params[:q] %>
+        <% if params[:q][:trecho_contains] != nil and params[:q][:entrada_gte] != nil and params[:q][:entrada_lte] != nil  %>
+
+        <%= javascript_include_tag "highcharts" %>
+
+                 
+        <% if !params[:q][:trecho_contains].blank? %>
+            <% @trecho = "%" + params[:q][:trecho_contains] + "%" %>
+
+        <% end %>
+
+        <% @filial = Filial.find_by_prefixo_trecho(params[:q][:trecho_contains]) %>
+
+        <% @periodo = params[:q][:entrada_gte].to_date..params[:q][:entrada_lte].to_date %>
+ 
+        <% if !@filial.blank? %>
+
+        <% if !params[:q][:cliente_contains].blank? %>
+        <% @cliente = "%" + params[:q][:cliente_contains] + "%" %>
+        <% @selected_embarques = Embarque.where("trecho LIKE ? and entrada >= ? and entrada <= ? and cliente LIKE ?", @trecho, params[:q][:entrada_gte].to_date, params[:q][:entrada_lte].to_date, @cliente ) %>   
+
+        <% else %>
+        <% @selected_embarques = Embarque.where("trecho LIKE ? and entrada >= ? and entrada <= ?", @trecho, params[:q][:entrada_gte].to_date, params[:q][:entrada_lte].to_date) %>  
+        <% end %>
+        
+
+         
+        <% @meta_patio = 30 %>
+
+        <% @dataon = @periodo.map {|date| @selected_embarques.entrada_on(date) } %>
+          
+        <% @capacidade = @filial.capacidade_do_patio %>
+
+        <% @metarecebimento = 130 %>
+         
+        <% @media = (@dataon.inject{ |sum, el| sum + el } / @dataon.size)/(@capacidade/100) %>
+          
+         
+        <% @patiohoras = @periodo.map {|date| @selected_embarques.media_on(date).to_f } %> 
+         
+
+        <% @patiohorasmedia = @patiohoras.inject{ |sum, el| sum + el }/@patiohoras.size %>
+
+
+<h2>  Indicadores diversos da Filial <%= @filial.name %> </h2>
+<h3>  De: <%= params[:q][:entrada_gte].to_date.strftime('%d/%m/%Y')  %> até:  <%= params[:q][:entrada_lte].to_date.strftime('%d/%m/%Y') %>  </h3>
+
+     <% if params[:q][:cliente_contains].blank? %>
+        <div id="container2" style="min-width: 400px; height: 400px; margin: 0 auto"></div> 
+     <% end %>
+        <div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+        <div id="container3" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+        <script type="text/javascript">
+
+ $(function () { 
+                $('#container').highcharts({
+                    chart: { 
+                        type: 'area'
+                    },
+                    credits: {
+                     enabled: false
+                    }, 
+                    title: {
+                        text: 'Giro de pátio'
+                    }, 
+                    subtitle: { text: 'Foram recebidos ' + <%= @selected_embarques.count %> + ' equipamentos no período, com uma media de ocupação de pátio de ' + <%= @media %> + '%.' 
+                }, 
+                    xAxis: {
+                        categories: <%= raw @periodo.map {|a| a.strftime('%d/%m') } %>,    
+                        tickmarkPlacement: 'on',
+                        title: {
+                            enabled: false
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Utilização'
+                        }
+                    },
+                    tooltip: {
+                        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} equipamentos)<br/>',
+                        shared: true
+                    },
+                    plotOptions: {
+                        area: {
+                            stacking: 'percent',
+                            lineColor: '#ffffff',
+                            lineWidth: 1,
+                            marker: {
+                                lineWidth: 1,
+                                lineColor: '#ffffff'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Disponivel', 
+                        data: <%= @periodo.map {|date| @capacidade } %>
+                    }, 
+                    {
+                        name: 'Utilizado',
+                        data: <%= @dataon.inspect %>
+                    }]
+                });
+            });
+
+
+
+
+
+ $(function () {
+     $('#container2').highcharts({
+                 chart: {
+                     type: 'column'
+                 },
+                 credits: {
+                     enabled: false
+                 },
+                 title: {
+                    <% if params[:q][:cliente_contains].blank? %>
+                     text: 'Carretas recebidas no terminal'
+                     <% else %>
+                     text: 'Recebidos da <%= params[:q][:cliente_contains] %>' 
+                     <% end %>
+                 },
+                 subtitle: { text: 'Foram recebidos ' + <%= @selected_embarques.count %> + ' equipamentos no período '},
+                 xAxis: {
+                     categories: <%= raw @periodo.map {|a| a.strftime('%d/%m') } %>
+                 },
+                 yAxis: {
+                     min: 0,
+                     title: {
+                         text: 'Numero de equipamentos recebidos'
+                     },
+                     stackLabels: {
+                         enabled: true,
+                         style: {
+                             fontWeight: 'bold',
+                             color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                         }
+                     }
+                 },
+                 legend: {
+                     align: 'right',
+                     x: -70,
+                     verticalAlign: 'top',
+                     y: 20,
+                     floating: true,
+                     backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
+                     borderColor: '#CCC',
+                     borderWidth: 1,
+                     shadow: false
+                 },
+                 tooltip: {
+                     formatter: function() {
+                         return '<b>'+ this.x +'</b><br/>'+
+                                 this.series.name +': '+ this.y +'<br/>'+
+                                 'Total: '+ this.point.stackTotal;
+                     }
+                 },
+                 plotOptions: {
+                     column: {
+                         stacking: 'normal',
+                         dataLabels: {
+                             enabled: true,
+                             color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                         }
+                     }
+                 },
+                 series: [
+                     {   name: 'Porto Velho', data: <%= @periodo.map {|date| @selected_embarques.recebido_pvh_on(date).to_f }.inspect %>},
+                     {   name: 'Belem', data: <%= @periodo.map {|date| @selected_embarques.recebido_bel_on(date).to_f }.inspect %>},
+                     {   name: 'Manaus', data: <%= @periodo.map {|date| @selected_embarques.recebido_mao_on(date).to_f }.inspect %>},
+                     <% if params[:q][:cliente_contains].blank? %>
+                     {   name: 'Meta', color: '#AA4643', marker: { enabled: false }, dashStyle: 'shortdot', type: 'spline',data: <%= (@periodo).map { |date| 90}.inspect %>}
+                     <% end %>
+                 ]
+             }
+     );
+ });
+
+ $(function () {
+                $('#container3').highcharts({
+                    chart: {
+                        type: 'column',
+                        margin: [ 50, 50, 100, 80]
+                    },
+                    title: {
+                        text: 'Tempo de permanência no Porto'
+                    },
+                    subtitle: {
+                        text: 'O Gráfico abaixo demonstra a media diaria de permanência no porto de origem das carregas que zarparam no período. Media selecionada de ' + <%= @patiohorasmedia.to_i %> + ' horas'
+                    },
+                    credits: {
+                     enabled: false
+                    }, 
+                    xAxis: {
+                        categories: <%= raw @periodo.map {|a| a.strftime('%d/%m') } %>,
+                        labels: {
+                            rotation: -45,
+                            align: 'right',
+                            style: {
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Tempo de pátio (horas)'
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        pointFormat: 'Tempo medio de permanencia: <b>{point.y:.1f} horas</b>',
+                    },
+                    series: [{
+                        name: 'Média',  
+                        data: <%= @periodo.map {|date| @selected_embarques.media_on(date).to_i }.inspect %> ,
+                        dataLabels: {
+                            enabled: true,
+                            rotation: -90,
+                            color: '#FFFFFF',
+                            align: 'right',
+                            x: 4,
+                            y: 10,
+                            style: {
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif',
+                                textShadow: '0 0 3px black'
+                            }
+                        }
+                    },
+                                {
+                                    name: 'Meta', 
+                                    color: '#AA4643',
+                                    marker: { enabled: false },
+                                    dashStyle: 'shortdot',
+                                    type: 'spline',
+                                    data: <%= @periodo.map {|date| 30 }.inspect %> ,
+                                    dataLabels: {
+                                        enabled: false,
+                                        rotation: -90,
+                                        color: '#FFFFFF', 
+                                        align: 'right',
+                                        x: 4,
+                                        y: 10,
+                                        style: {
+                                            fontSize: '13px',
+                                            fontFamily: 'Verdana, sans-serif',
+                                            textShadow: '0 0 3px black'
+                                        }
+                                    }
+                                }]
+                });
+            });
+            
+
+
+           $(function () {
+                $('#container3').highcharts({
+                    chart: {
+                        type: 'column',
+                        margin: [ 50, 50, 100, 80]
+                    },
+                    title: {
+                        text: 'Tempo de permanência no Porto'
+                    },
+                    subtitle: {
+                        text: 'O Gráfico abaixo demonstra a media diaria de permanência no porto de origem das carregas que zarparam no período. Media selecionada de ' + <%= @patiohorasmedia.to_i %> + ' horas'
+                    },
+                    credits: {
+                     enabled: false
+                    }, 
+                    xAxis: {
+                        categories: <%= raw @periodo.map {|a| a.strftime('%d/%m') } %>,
+                        labels: {
+                            rotation: -45,
+                            align: 'right',
+                            style: {
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Tempo de pátio (horas)'
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        pointFormat: 'Tempo medio de permanencia: <b>{point.y:.1f} horas</b>',
+                    },
+                    series: [{
+                        name: 'Média',  
+                        data: <%= @periodo.map {|date| @selected_embarques.media_on(date).to_i }.inspect %> ,
+                        dataLabels: {
+                            enabled: true,
+                            rotation: -90,
+                            color: '#FFFFFF',
+                            align: 'right',
+                            x: 4,
+                            y: 10,
+                            style: {
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif',
+                                textShadow: '0 0 3px black'
+                            }
+                        }
+                    },
+                                {
+                                    name: 'Meta', 
+                                    color: '#AA4643',
+                                    marker: { enabled: false },
+                                    dashStyle: 'shortdot',
+                                    type: 'spline',
+                                    data: <%= @periodo.map {|date| @meta_patio }.inspect %> ,
+                                    dataLabels: {
+                                        enabled: false,
+                                        rotation: -90,
+                                        color: '#FFFFFF', 
+                                        align: 'right',
+                                        x: 4,
+                                        y: 10,
+                                        style: {
+                                            fontSize: '13px',
+                                            fontFamily: 'Verdana, sans-serif',
+                                            textShadow: '0 0 3px black'
+                                        }
+                                    }
+                                }]
+                });
+            });
+            
+
+
+        </script>
+
+
+        <% end %>
+
+        <% else %>
+         
+        <small>Para exibição de indicador, realize uma pesquisa na barra lateral informando a Filial de Origem no campo TRECHO</small> </br>
+        <small><b>LEMBRE-SE</b> as listagens de carretas de comboios que sairam após as 08:00 AM todos os dias podem aparecer por completo apenas as 08:00 do dia seguinte.</small> 
+
+
+        <% end %>
+
+
+
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,48 @@
+show do |ordem_de_servico|
+    attributes_table do
+      row "Status",:status do |os| 
+        if !os.status.blank?
+          case os.status
+          when 'pendente'
+            status_tag(os.status, :warn)
+          when 'solicitacao'
+            status_tag(os.status, :warn)
+          when 'andamento'
+            status_tag(os.status, :azul)
+          when 'realizada'
+            status_tag(os.status, :ok)
+          when 'agendada'
+            status_tag(os.status, :ok)
+          when 'negada'
+            status_tag(os.status, :error)
+          end
+        end
+      end
+      row :navio do |os|              
+        os.navio.name if !os.navio.name.blank?
+      end
+      row :data
+      row :prazo
+      row :relator
+      row :ResponsavelSolicitacao do |t|
+        t.ResponsavelSolicitacao.name if !t.ResponsavelSolicitacao.blank?
+      end 
+      row :testemunha
+      row :solicitacao do |t|
+        simple_format t.solicitacao if !t.solicitacao.blank?
+      end
+      row :diagnostico do |t|
+        simple_format t.diagnostico if !t.diagnostico.blank?
+      end      
+      row :causa do |t|
+        simple_format t.causa if !t.causa.blank?
+      end     
+      row :avaliacao
+      row :detalhamento_da_conclusao do |t|
+        simple_format t.detalhamento_da_conclusao if !t.detalhamento_da_conclusao.blank?
+      end    
+      row "Fotos" do |os|
+        render "fotos"
+      end
+    end
+  end

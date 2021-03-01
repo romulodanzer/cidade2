@@ -1,0 +1,47 @@
+<table style="border-color: black;" border="1" width="821">
+<tbody>
+<tr>
+<td colspan="3" width="198">
+	<strong>
+		EMPENHO: 
+		<% if @despesa.aprovada? %>
+			APROVADO 
+		<% else %>
+			NAO APROVADO
+		<% end %>
+			
+</strong>
+</td>
+<td style="text-align: left;" width="209">&nbsp;</td>
+<td colspan="2" width="180"><strong>SOLICITANTE/RAMAL</strong></td>
+<td style="text-align: left;" colspan="2" width="234">&nbsp;<%= @despesa.solicitante.name %></td>
+</tr>
+<tr>
+<td colspan="3"><strong>CENTRO DE CUSTO:</strong></td>
+<td style="text-align: left;">5.11.12.02</td>
+<td colspan="2"><strong>N&ordm; RC:</strong></td>
+<td style="text-align: left;" colspan="2" width="234"><%= @despesa.id %></td>
+</tr>
+<tr>
+</tr>
+<tr>
+<td colspan="3"><strong>UNIDADE:</strong></td>
+<td><strong><%= @despesa.filial.name %> </strong></td>
+<td style="text-align: left;">02</td>
+<td colspan="2"><strong>DEPARTAMENTO/DIVIS&Atilde;O:</strong></td>
+<td style="text-align: left;">05</td>
+</tr>
+<tr>
+<td colspan="3"><strong>&Aacute;REA DE APLICA&Ccedil;&Atilde;O:</strong></td>
+<td>NAVEGA&Ccedil;&Atilde;O</td>
+<td style="text-align: left;">11</td>
+<td style="text-align: left;" colspan="3"><%= @despesa.centro_de_custo.name %></td>
+</tr>
+<tr>
+<td colspan="3"><strong>SETOR/SEGMENTO:</strong></td>
+<td>NAVEGA&Ccedil;&Atilde;O OPERACIONAL</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;" colspan="3">&nbsp;<%= @despesa.fornecedor.name %></td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,66 @@
+<table>
+<tbody>
+<tr>
+<td><img src="http://www.jfnavegacao.com.br/imagens/logo-jf.png" alt="logo-jf" width="133" height="85" /></td>
+</tr>
+</tbody> 
+</table>
+<h4>Prezado, <%= @cliente.name %>!</h4>
+  
+<p>Informamos o fim de viagem do rebocador <strong><%= @viagem.navio.name %></strong> em <strong><%= @viagem.trecho.destino %></strong> contendo <%= @carretas.count %> equipamento(s) de sua empresa:</p>
+<p>Segue(m) ele(s):</p>
+
+<table border="1"><caption>&nbsp;</caption>
+  <tbody>
+  <tr>
+  <td style="text-align: left;"><strong>Placa</strong></td>
+  <td style="text-align: left;"><strong>Navio</strong></td>
+  <td style="text-align: left;"><strong>Balsa</strong></td>
+  <td style="text-align: left;"><strong>Entrada Patio</strong></td>
+  <td style="text-align: left;"><strong>Inicio Viagem</strong></td>
+  <td style="text-align: left;"><strong>Fim Viagem</strong></td>
+  <% if @cliente.envia_conhecimento? %>
+    <td style="text-align: left;"><strong>Chave CT-e</strong></td>
+  <% end %>
+  </tr>
+ 
+    <% for carreta in @carretas %>
+ 
+    <tr>
+      <td style="text-align: left;"><%= carreta.placa %></td>
+      <td style="text-align: left;"><%= @viagem.navio.name %></td>
+      <td style="text-align: left;"><%= carreta.sbalsa %></td>
+      <td style="text-align: left;"><%= carreta.entrada.strftime('%d/%m %H:%M') %></td>
+      <td style="text-align: left;"><%= @viagem.inicio_viagem.strftime('%d/%m %H:%M') %></td>
+      <td style="text-align: left;"><%= @viagem.fim_viagem.strftime('%d/%m %H:%M') %></td>
+      <% if @cliente.envia_conhecimento? %>
+            <% if carreta.chave_aqua? %>
+              <td style="text-align: left;"><%= carreta.chave_aqua %></td>
+            <% else %>
+              <td style="text-align: left;">em processo de importação</td>
+           <% end %>
+      <% end %>
+    </tr> 
+     
+    <% end %> 
+  </tbody>
+</table>
+<p>&nbsp;</p>
+<p style="text-align: left;"><strong>Atenciosamente,</strong></p>
+<p style="text-align: left;"><strong>Servi&ccedil;o de Atendimento ao Cliente(SAC)&nbsp;- Porto Chibat&atilde;o</strong></p>
+<table style="height: 149px;" width="596">
+<tbody>
+<tr>
+<td><img src="http://www.sindarma.org.br/web/imagens/posts/45/45-Logo_Cidade_Transportes.JPG" alt="logo jf" width="140" height="90" /></td>
+<td><strong>TUP -</strong> J. F. OLIVEIRA NAVEGA&Ccedil;&Atilde;O - <strong>MANAUS/AM </strong><br />(C.A.N&deg; 18/2014-ANTAQ) <br />Telefone: 55.92.<strong>2127-1015</strong>&nbsp;
+<div class="texto"><strong>TUP -</strong> J. F. OLIVEIRA NAVEGA&Ccedil;&Atilde;O - <strong>PORTO VELHO/RO</strong>&nbsp;</div>
+<div class="texto">(C.A.N&deg; 048/97-ANTAQ) <br />Telefone: 55.69.<strong>2182-1900</strong>&nbsp;</div>
+<strong>TUP -</strong> J. F. OLIVEIRA NAVEGA&Ccedil;&Atilde;O - <strong>BEL&Eacute;M/PA</strong> <br />(C.A.N&deg; 053/2014-ANTAQ)<br />Telefone: 55.91.<strong>3277-6600</strong>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: left;">&nbsp;</p>
+<div class="texto"><br /><br /></div>
+<div class="texto">&nbsp;</div>
+<div class="texto">&nbsp;</div>
+<p>&nbsp;</p>

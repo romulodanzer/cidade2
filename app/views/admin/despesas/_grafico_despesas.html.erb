@@ -1,0 +1,71 @@
+
+<%= javascript_include_tag "highcharts" %>
+<% @centros_de_custo = Despesa.where(updated_at: Time.now.beginning_of_year..Time.now).group(:centro_de_custo_id) %>
+<% @total_de_notas = Despesa.where(updated_at: Time.now.beginning_of_year..Time.now).count %>
+
+
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $('#footer').highcharts({
+                                            chart: {
+                                                type: 'column',
+                                                margin: [ 50, 50, 100, 80]
+                                            },
+                                            title: {
+                                                text: "Despesas por Centro de Custo no Ano Atual"
+                                            },
+                                            subtitle: { text: 'Foram registradas ' + <%= @total_de_notas %> + ' notas este ano' },
+                                           credits: {
+                                                enabled: false
+                                            },
+
+                                            xAxis: {
+                                                categories: <%= raw @centros_de_custo.map {|centro| centro.centro_de_custo.name }.inspect %>,
+                                                labels: {
+                                                    rotation: -45,
+                                                    align: 'right',
+                                                    style: {
+                                                        fontSize: '8px',
+                                                        fontFamily: 'Verdana, sans-serif'
+                                                    }
+                                                }
+                                            },
+                                            yAxis: {
+                                                min: 0,
+                                                title: {
+                                                    text: 'Valor (R$)'
+                                                }
+                                            },
+                                            legend: {
+                                                enabled: false
+                                            },
+                                            tooltip: {
+                                                formatter: function() {
+                                                    return '<b>'+ this.x +'</b><br/>'+
+                                                        'Valor Total: R$'+ Highcharts.numberFormat(this.y, 1)
+                                                }
+                                            },  
+                                            series: [{
+                                                name: '-',
+                                                data: <%= raw @centros_de_custo.map {|centro| centro.compra_navios.sum(:valor).to_i }.inspect %>,
+                                                dataLabels: {
+                                                    enabled: true,
+                                                    rotation: -90,
+                                                    color: '#FFFFFF',
+                                                    align: 'right',
+                                                    x: 4,
+                                                    y: 10,
+                                                    style: {
+                                                        fontSize: '13px',
+                                                        fontFamily: 'Verdana, sans-serif'
+                                                    }
+                                                }
+                                            }]
+                                        });
+                                    });
+
+                                </script>
+
+
+
+            

@@ -1,0 +1,17 @@
+form :html => { :enctype => "multipart/form-data" } do |f| f.inputs "Informar
+Carregamento" do #f.input :navio_id, :label => "Empurrador", :hint => "Selecione
+o empurrador", :as => :select, :collection => Navio.find.all.order("name ASC")
+f.semantic_errors #f.input :filial, :as => :radio, :collection =>
+Filial.where("filial_id IN ?", current_user.filiais) f.input :filial, :as =>
+:radio, :collection => current_user.filiais f.input :navio, :label =>
+'Empurrador', :as => :select, :collection => Navio.find.all.order("name ASC")
+f.input :balsa, :label => "Balsa", :hint => "Selecione a Balsa", :as => :select,
+:collection => Balsa.find.all.order("name ASC") #f.input :balsa, :hint =>
+"Selecione o Balsa" f.input :parado, :hint => "Preencha com o total das
+paradas", :as => :number f.input :inicio, :label => "Inicio do Carregamento",
+:as => :datetime_picker # :hint => "Preencha com a data real do inicio do
+Carregamento", :as => :datetime_picker f.input :fim, :label => "Fim do
+Carregamento", :hint => "Preencha com o data real do fim da Carregamento", :as
+=> :datetime_picker f.input :carretas, :hint => "Total de equipamentos na
+balsa", :as => :number f.input :anexo, :as => :file #f.has_many :paradas end
+f.actions end

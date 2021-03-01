@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+
+<% for avaria in @print %>
+
+<div class="nobreak">
+  <h2>#<%= avaria.id %> <%= avaria.cliente %></h2>
+  <h4><span style="color: #808080;"><%= avaria.placa %> - <%= avaria.filial.name %> - Tipo - <%= avaria.tipo_avaria.name %> </span></h4>
+  <h5><span style="color: #808080;"><%= avaria.data.to_formatted_s(:short) %> </span></h4>
+  <p><span style="color: #000000;"><%= avaria.descricao %></span></p>
+</div>
+<% end %>
+
+  </body>
+</html>
+
+<style type="text/css">
+  
+  div.alwaysbreak { page-break-before: always; }
+  div.nobreak:before { clear:both; }
+  div.nobreak { page-break-inside: avoid; }
+
+ ul.img-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+ul.img-list li {
+  display: inline-block;
+  width: 320px;
+  height: 240px;
+  margin: 0;
+  position: relative;
+}
+
+span.text-content {
+  background: black;
+  color: white;
+  cursor: pointer;
+  display: table;
+  height: auto;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: auto;
+}
+ 
+span.text-content span {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+</style>

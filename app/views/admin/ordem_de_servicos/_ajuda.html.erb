@@ -1,0 +1,138 @@
+<%= javascript_include_tag "highcharts" %>
+<div class"alert">
+  Foram atualizadas <%= OrdemDeServico.where("updated_at > ?", Date.today).count %> ordens de Serviço hoje. </br>
+  Foram finalizadas <%= OrdemDeServico.where("updated_at > ? and status = ?", Date.today, 'realizada').count %> ordens de Serviço hoje.
+</div> 
+
+<b><%= link_to("Listar todas as pendencias por departamento", "/admin/os_pendentes", :target => '_blank') %> </b></br>
+
+<% if params[:q] %>
+ 
+        <% if params[:q][:data_gte] != nil and params[:q][:data_lte] != nil  %>
+
+          <% @data_ini = params[:q][:data_gte].to_date %>
+          <% @data_fim = params[:q][:data_lte].to_date %>
+          <% @periodo = params[:q][:data_gte].to_date..params[:q][:data_lte].to_date %>
+          <% @status = params[:q][:status_in] %>
+          <% @filiais = params[:q][:filial_id_in] %>
+          <% @responsaveis = [] %>
+
+          <% for responsavel in ResponsavelSolicitacao.all %>
+          <% if OrdemDeServico.where("data >= ? and data <= ? and ResponsavelSolicitacao_id = ?", @data_ini.to_date, @data_fim.to_date, responsavel.id).count > 0 %>
+          <% @responsaveis << responsavel %>
+          <% end %>
+          <% end %>
+    	
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+
+    <script type="text/javascript"> 
+	$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Percentual de Atendimento Por Departamento perido de Pesquisado'
+            },
+            xAxis: { 
+                categories: <%= raw @responsaveis.map { |e| e.name } %>
+            },
+            yAxis: {  
+                min: 0,
+                title: {
+                    text: 'Porcentagem'  
+                }	
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                shared: true
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'percent'
+                } 
+            },
+                series: [{
+                name: 'Pendentes', 
+                data: <%= raw @responsaveis.map { |e| OrdemDeServico.where("data >= ? and data <= ? and ResponsavelSolicitacao_id = ? and status = 'pendente'", @data_ini.to_date, @data_fim.to_date, e.id).count } %>
+            },
+            {
+                name: 'Realizadas', 
+                data: <%= raw @responsaveis.map { |e| OrdemDeServico.where("data >= ? and data <= ? and ResponsavelSolicitacao_id = ? and status = 'realizada'", @data_ini.to_date, @data_fim.to_date, e.id).count } %>
+            } ]
+        });
+    });
+
+</script>
+    	 		
+</div>
+     <% end %>
+ 
+ <% else %>
+ 
+
+          <% @data_ini = Time.now-30.days %>
+          <% @data_fim = Time.now %>
+
+          <% @responsaveis = [] %>
+          <% for responsavel in ResponsavelSolicitacao.all %>
+          <% if OrdemDeServico.where("data >= ? and data <= ? and ResponsavelSolicitacao_id = ?", @data_ini.to_date, @data_fim.to_date, responsavel.id).count > 0 %>
+          <% @responsaveis << responsavel %>
+          <% end %>
+          <% end %>
+      
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+
+    <script type="text/javascript"> 
+  $(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Percentual de Atendimento nos ultimos 30 dias'
+            },
+            xAxis: { 
+                categories: <%= raw @responsaveis.map { |e| e.name } %>
+            },
+            yAxis: {  
+                min: 0,
+                title: {
+                    text: 'Porcentagem'  
+                } 
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                shared: true
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'percent'
+                } 
+            },
+                series: [{
+                name: 'Pendentes', 
+                data: <%= raw @responsaveis.map { |e| OrdemDeServico.where("data >= ? and data <= ? and ResponsavelSolicitacao_id = ? and status = 'pendente'", @data_ini.to_date, @data_fim.to_date, e.id).count } %>
+            },
+            {
+                name: 'Realizadas', 
+                data: <%= raw @responsaveis.map { |e| OrdemDeServico.where("data >= ? and data <= ? and ResponsavelSolicitacao_id = ? and status = 'realizada'", @data_ini.to_date, @data_fim.to_date, e.id).count } %>
+            } ]
+        });
+    });
+
+</script>
+          
+</div>
+
+
+
+<% end %>
+
+
+
+
+
+
+
+

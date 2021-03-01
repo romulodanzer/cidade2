@@ -1,0 +1,47 @@
+  <title>Gestosat | Mapas</title>
+<head>
+<%= javascript_include_tag "jquery" %>
+<% if can? :read, Mensagem %>
+    <%= javascript_include_tag "mensagens" %>
+<% end %>
+<% if can? :create, Viagem %>
+    <%= javascript_include_tag "alertas" %>
+<% end %>
+<%= javascript_include_tag "bootstrap" %>
+
+<script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' />
+
+
+<script src='/js/leaflet.awesome-markers.js'></script>
+<script src="/js/leaflet.extra-markers.min.js"></script>
+
+<link href='/css/leaflet.awesome-markers.css' rel='stylesheet' />
+<link href='/css/font-awesome.css' rel='stylesheet' />
+<link rel="stylesheet" href="/css/leaflet.extra-markers.min.css">
+
+<script type="text/javascript">
+$( document ).ready(function carrega_mapa() {
+      $('#map').html('<%= escape_javascript render("layouts/mapa") %>');
+});
+
+</script>
+
+</head>
+
+<div id="map"></div>
+
+
+<style type="text/css">
+html,body {width:100%;height:100%;margin:0;padding:0;background-color: black}
+#map {
+    position:relative;
+    height:93%;
+    bottom:0;
+    top:0;
+    left:0;
+    right:0;
+    margin-top:-20px; /* adjust top margin to your header height */
+    margin-bottom: 0px;
+}
+</style>

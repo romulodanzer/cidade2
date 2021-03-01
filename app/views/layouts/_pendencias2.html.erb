@@ -1,0 +1,35 @@
+
+<% @navio_ordens = OrdemDeServico.where(status: 'pendente').group(:navio_id).map { |e| e.navio_id } %>
+
+<% @navios = Navio.where(id: @navio_ordens).order(:name) %>
+
+  <% @navios.each do |t| %>
+  	<div>
+	    <h4><%= t.name %> </h4></br>
+
+	      <%  OrdemDeServico.where(:navio_id => t.id, status: 'pendente').order(:ResponsavelSolicitacao_id).each do |s| %>
+    		<div>
+
+	      <b> <%= s.id %> - <%= s.ResponsavelSolicitacao.name %> - <%= s.data.strftime('%d/%m') %> </b> 
+          <% if s.navio.viagens.count > 0 %>
+          <% if s.navio.viagens.last.fim_viagem != nil %>
+            <%  if s.navio.viagens.last.trecho.destino? %>
+                (<%= "Em " + s.navio.viagens.last.trecho.destino + " faz " + time_ago_in_words(s.navio.viagens.last.fim_viagem) %>)
+             <%  end %>
+          <% else %>
+            <%  if s.navio.viagens.last.trecho.destino? %>
+              (<%= "Chega em " + s.navio.viagens.last.trecho.destino + " em " + distance_of_time_in_words(Time.now, s.navio.viagens.last.previsao, true) %>)</br>
+            <%  end %> 
+          <% end %>
+          <% end %>
+ </br>
+	      <%= simple_format s.solicitacao %> </br>
+	      </div>
+	
+	      <% end %> 
+	<hr>	
+	</div>
+    
+    <% end %> 
+
+ 

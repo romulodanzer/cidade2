@@ -1,0 +1,9 @@
+
+<% if can? :read, Mensagem %>
+	<% if Mensagem.where("msgsubtype = 1001 and macronumber = 0 and done = false").count > 0 && current_user.audio_mensagem %>
+    	<%= audio_tag("lq.mp3", autoplay: true, controls: false) %>
+	<% end %>
+<% end %>
+
+
+  

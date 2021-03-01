@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+    <%= csrf_meta_tags %>
+  </head>
+ <% if current_user %>
+ <div id="navbar">
+	<%= render "layouts/navbar" %>
+  </div>
+    <% if flash[:error] %>
+      <div class="alert alert-error" id="meuAlerta">
+        <button type="button" class"close" data-dismiss="alert">&times;</button>
+        <%= flash[:error] %>
+      </div>
+    <% elsif flash[:alert] %>
+      <div class="alert" id="meuAlerta">
+        <button type="button" class"close" data-dismiss="alert">&times;</button>
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+ <% end %> 
+
+<body>  
+  <%= yield %>
+</body>
+
+ 
+</html>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    setTimeout(function () {
+      $('#meuAlerta').hide('fade')
+    }, 5000)
+  })
+
+ </script>
+
+
+

@@ -1,0 +1,60 @@
+
+<script type="text/javascript">
+
+L.mapbox.accessToken = 'pk.eyJ1Ijoicm9tdWxvZGFuemVyIiwiYSI6ImNrZzN4dmdiOTA5czQydnFzNTl0Y3h3MTAifQ.hdv_DUpcRMEzbETwxpNGhA'
+var map = L.mapbox.map('map').setView([-3.505, -55.09], 7);
+
+  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoicm9tdWxvZGFuemVyIiwiYSI6ImNrZzN4dmdiOTA5czQydnFzNTl0Y3h3MTAifQ.hdv_DUpcRMEzbETwxpNGhA', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+      '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="http://mapbox.com">Mapbox</a>' + ' Desenvolvimento <a href="https://br.linkedin.com/in/romulodanzer">Rômulo Danzer</a>',
+    id: 'mapbox.streets'
+  }).addTo(map);
+
+  //
+
+  //
+
+var featureLayer = L.mapbox.featureLayer()
+    .loadURL('/geoson.json')
+    // Once this layer loads, we set a timer to load it again in a few seconds.
+    .on('ready', run)
+    .addTo(map);
+
+function run() {
+    featureLayer.eachLayer(function(layer) {
+      layer.bindPopup('<b>' +
+        layer.feature.properties.nome +
+        '</b>' + '</br> <b>Destino:</b>' +
+        layer.feature.properties.destino +
+        '</br> <b>Inicio: </b> ' +
+        layer.feature.properties.Inicio +
+        '</br> <b>Previsão: </b> ' +
+        layer.feature.properties.Previsao +
+        '</br> <b>LngLat: </b> ' +
+        layer.feature.properties.LngLat +
+        '</br> <b>Local: </b> ' +
+        layer.feature.properties.Local +
+        '</br> <b>Atualizado: </b> ' +
+        layer.feature.properties.Atualizado +
+        layer.feature.properties.viagem )
+    });
+//
+//
+    map.fitBounds(featureLayer.getBounds());
+
+    window.setTimeout(function() {
+        featureLayer.loadURL('/geoson.json');
+    }, 60000);
+}
+
+  featureLayer.on('layeradd', function(e) {
+    var marker = e.layer,
+        feature = marker.feature;
+    //marker.setIcon(L.icon(feature.properties.icon));
+    marker.setIcon(L.ExtraMarkers.icon({markerColor: feature.properties.icon, prefix: 'fa', innerHTML: '<b>' + feature.properties.html + ' </b>' + ' <font color="white"> <small>' + feature.properties.destinoabv + '</small> </font>' }));
+
+});
+
+</script>

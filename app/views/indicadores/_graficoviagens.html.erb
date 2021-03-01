@@ -1,0 +1,106 @@
+<% if @viagem.navio.rpm_config? %>
+
+<% if @viagem.navio.rpm_max != nil || @viagem.navio.rpm_min != nil %>
+
+<% if @viagem.fim_viagem == nil %>
+    <% @fim = Time.now  %> 
+   <% else %>
+    <%  @fim = @viagem.fim_viagem %>
+<% end %>  
+
+<% @conteudo = Mensagem.where("navio_id = ? and binarydatatype = '1' and rpm is not null and messagetime >= ? and messagetime <= ? ",@viagem.navio_id, @viagem.inicio_viagem, @fim) %>
+<% @contagem = @conteudo.count %>
+ 
+        <%= javascript_include_tag "highcharts" %>
+        
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+
+Highcharts.setOptions({
+    lang: {
+        months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        shortMonths: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        weekdays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+        loading: ['Atualizando o gráfico...aguarde'],
+        contextButtonTitle: 'Exportar gráfico',
+        decimalPoint: ',',
+        thousandsSep: '.',
+        downloadJPEG: 'Baixar imagem JPEG',
+        downloadPDF: 'Baixar arquivo PDF',
+        downloadPNG: 'Baixar imagem PNG',
+        downloadSVG: 'Baixar vetor SVG',
+        printChart: 'Imprimir gráfico', 
+        rangeSelectorFrom: 'De',
+        rangeSelectorTo: 'Para',
+        rangeSelectorZoom: 'Zoom',
+        resetZoom: 'Limpar Zoom',
+        resetZoomTitle: 'Voltar Zoom para nível 1:1',
+    }, 
+    credits: {
+      enabled: false
+  }
+});
+
+
+
+$(function () {
+    $('#container').highcharts({
+        title: {
+            text: 'Acompanhamento de RPM',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Fonte: Autotrac',
+            x: -20
+        },
+        xAxis: { 
+            categories: <%= raw @conteudo.map {|viagem| viagem.messagetime.strftime('%d/%m %H:%M') }.inspect %>
+        },
+        yAxis: {
+            title: {
+                text: 'RPM'
+            },
+            plotLines: [{ 
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: 'rpm',
+            enabled: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'Motor 1',
+            data: <%= raw @conteudo.map {|viagem| viagem.rpm.to_i }.inspect %>
+        },
+        {
+            name: 'Motor 2',
+            data: <%= raw @conteudo.map {|viagem| viagem.velocity.to_i }.inspect %>
+        },
+        {
+            name: 'rpm maximo',
+            type: 'spline',
+            color: '#AA4643',
+            data: <%= [@viagem.navio.rpm_max]*@contagem %>
+        },
+        {
+            name: 'rpm minimo',
+            type: 'spline',
+            color: '#AA4643',
+            data: <%= [@viagem.navio.rpm_min]*@contagem %>
+        }]
+    });
+});
+</script>
+
+<% end %>
+
+<% end %>

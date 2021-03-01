@@ -1,0 +1,27 @@
+<p style="text-align: right;"><%= link_to "Imprimir", "#{resource_path}" + ".pdf" %></p>
+    
+
+<script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' /> 
+
+
+<script src='/js/leaflet.awesome-markers.js'></script>
+<script src="/js/leaflet.extra-markers.min.js"></script>
+
+<link href='/css/leaflet.awesome-markers.css' rel='stylesheet' />
+<link href='/css/font-awesome.css' rel='stylesheet' />
+ <link rel="stylesheet" href="/css/leaflet.extra-markers.min.css">
+
+<div style='width: 100%;'>
+  <div id="map" style='height: 300px;'></div> 
+</div>    
+
+<div id="map"></div>
+
+
+<script type="text/javascript">  
+$( document ).ready(function carrega_mapa() {
+      $('#map').html('<%= escape_javascript render("layouts/mapa_mensagem") %>');
+});
+
+</script> 

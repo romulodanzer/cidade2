@@ -1,0 +1,14 @@
+<% if params[:q].blank? %>
+
+  <strong>Ultimos em PDF: </strong>
+  <% @barcos = Hidrante.este_mes.group(:embarcacao) %>
+    <% if !@barcos.blank? %>
+      <% for barco in @barcos %>
+        <% data = barco.created_at.strftime('%Y-%m-%d') %>
+        <% nomebarco = barco.embarcacao %>
+        <%= link_to barco.embarcacao + " " + Hidrante.este_mes.where(:embarcacao => barco.embarcacao).count.to_s, "/admin/controlede_hidrantes.pdf?order=id_desc&q%5Bcreated_at_gte%5D=#{data}&q%5Bembarcacao_equals%5D=#{nomebarco}&utf8=%E2%9C%93", :target => "_blank"  %>,
+          <%= ' ' %>
+      <% end %>
+  <% end %>
+
+<% end %>

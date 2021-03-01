@@ -1,0 +1,152 @@
+<% if params[:q] != nil and params[:q][:inicio_lte] != nil and params[:q][:inicio_gte] != nil and params[:q][:filial_id_eq]  %>
+<% if params[:q][:inicio_lte].to_date > params[:q][:inicio_gte].to_date %>
+
+<%= javascript_include_tag "highcharts" %>
+
+<% @filial = params[:q][:filial_id_eq].to_i %>
+<% @periodo = params[:q][:inicio_gte].to_date..params[:q][:inicio_lte].to_date %>
+<% @meta = Filial.find(@filial).meta_de_carregamento %>
+<% @carregamentos = Carregamento.where("filial_id = ? and inicio >= ? and inicio <= ? and total > 0",params[:q][:filial_id_eq].to_i, params[:q][:inicio_gte].to_date, params[:q][:inicio_lte].to_date) %>
+<% nameta = Carregamento.where("filial_id = ? and inicio >= ? and inicio <= ? and produzido <= ?",params[:q][:filial_id_eq].to_i, params[:q][:inicio_gte].to_date, params[:q][:inicio_lte].to_date, @meta).count %>
+<% forameta = Carregamento.where("filial_id = ? and inicio >= ? and inicio <= ? and produzido > ?",params[:q][:filial_id_eq].to_i, params[:q][:inicio_gte].to_date, params[:q][:inicio_lte].to_date, @meta).count %>
+<% totalcarregado = nameta+forameta %>
+<% media = Carregamento.where("filial_id = ? and inicio >= ? and inicio <= ?",params[:q][:filial_id_eq].to_i, params[:q][:inicio_gte].to_date, params[:q][:inicio_lte].to_date).average(:produzido) %>
+
+
+<h2>  Indicadores de carregamentos da Filial <%= Filial.find(@filial).name %> </h2>
+<h3>  De: <%= params[:q][:inicio_gte].to_date.strftime('%d/%m/%Y')  %> até:  <%= params[:q][:inicio_lte].to_date.strftime('%d/%m/%Y') %>  </h3>
+
+
+<div id="container2" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'column',
+                margin: [ 50, 50, 100, 80]
+            },
+            title: {
+                text: 'Desempenho'
+            },
+            subtitle: { text: 'Foram realizadas  ' + <%= totalcarregado  %>+ ' carregamentos no periodo, com média de ' + <%= media.to_s[0..3] %>+ ' horas por balsa.' },
+           credits: {
+                enabled: false
+            },
+
+            xAxis: {
+                categories: <%= raw @carregamentos.map {|carregamento| carregamento.balsa.name }.inspect %>, 
+                labels: {
+                    rotation: -95,
+                    align: 'right',
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Tempo (horas)'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +'</b><br/>'+ 'Carregamento: '+ Highcharts.numberFormat(this.y, 1) +' horas';
+                }
+            },
+            series: [{
+                name: '-',
+                data: <%= raw @carregamentos.map {|carregamento| carregamento.produzido } %>,
+                dataLabels: {
+                    enabled: false,
+                    rotation: -45,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    x: 4,
+                    y: 10,
+                    style: {
+                        fontSize: '10px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            {
+                name: 'Meta',
+                color: '#AA4643',
+                type: 'spline',
+                dashStyle: 'shortdot',
+                marker: { enabled: false } ,
+                data: <%= raw @carregamentos.map {|carregamento| @meta } %>
+            }]
+        });
+    });
+
+</script>
+
+
+
+<script type="text/javascript">
+$(function () {
+    $('#container2').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Carregamento de Balsas'
+        },
+        subtitle: { text: 'Meta de Carregamento estipulado em ' + <%= @meta %> +' horas.' },
+        tooltip: {
+            pointFormat: 'Total: <b>{point.percentage:.1f}%</b>'
+        },
+                exporting: {
+      enabled: false
+    },
+    credits: {
+                enabled: false
+            },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                },
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '',
+            data: [
+                ['Fora da meta',   <%= forameta %>],
+                {
+                    name: 'Na meta ',
+                    y: <%= nameta %>,
+                    sliced: true,
+                    selected: false
+                }
+            ]
+        }]
+    });
+});
+
+</script>
+
+<% else %>
+          A data de inicio deve ser menor que de fim para exibição do indicador.
+<% end %>
+<% else %>
+          Para ver o indicador use o filtro ao lado. É necessario informar uma filial e as datas.
+<% end %>

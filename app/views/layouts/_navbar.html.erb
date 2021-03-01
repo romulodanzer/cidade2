@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+  <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>                        
+      </button> 
+    <a class="navbar-brand" href="/admin">GESTOSAT</a>
+    </div> 
+    <div class="collapse navbar-collapse" id="myNavbar"> 
+  <ul class="nav navbar-nav">
+    <li><a href="/admin"><span class="glyphicon glyphicon-home"></span> Ver Painel</a></li>
+  </ul>
+      <%= render "layouts/direita" %>
+    </div> 
+  </div>
+
+</nav>
+<% if can? :create, Viagem %> 
+  <% if !@sem_viagem.blank? %>
+   <% if @sem_viagem.count > 0 %>
+
+   <div class="alert alert-danger" id="meuAlerta"> 
+      <%= "Existem " + @sem_viagem.count.to_s + " se movimentando sem viagens abertas:" + @sem_viagem.to_s %> 
+    </div>
+ 
+   <% end %> 
+   <% end %> 
+<% end %> 
+ 
+

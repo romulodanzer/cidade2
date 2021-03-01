@@ -1,0 +1,17 @@
+#modal
+  %h2 Novo Carregamento
+  %p.modal-description Adição Rápida.
+
+  .section#quick-errors
+    -# # = render 'error_messages', object: @carregamento
+
+  .section.form-fluid
+    = simple_form_for(@carregamento, url: admin_carregamento_quick_create_path, remote: true) do |f|
+      .form-inputs
+        = f.input :navio
+        = f.input :filial
+        = f.input :inicio
+        = f.input :fim
+        
+      %ul.form-actions
+        %li

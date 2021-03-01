@@ -1,0 +1,22 @@
+Declaro ter recebido da empresa J.F de Oliveira Navegação, uma listagem de pedidos de serviços do departamento em que trabalho, contendo os Ids: </br>
+
+
+<ul>
+
+<% if !@solicitacoes.blank? %>
+  <% for solicitacao in @solicitacoes %>
+    <%= solicitacao.id %>
+  <% end %>
+<% else %>
+  
+<% end %>
+
+
+
+ </ul>
+
+
+<ul>Nome: _______________________ </ul>
+<ul>Data: __________ Hora: _______</ul>
+
+ 

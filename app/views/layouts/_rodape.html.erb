@@ -1,0 +1,20 @@
+<table style="border-color: black;" border="1" width="821">
+<tbody>
+
+<tr>
+<td colspan="2"><strong>VENCIMENTO NF:</strong></td>
+<% if !@despesa.vencimento_nota.blank? %>
+<td colspan="2"><%= @despesa.vencimento_nota.strftime("%d/%m/%y") %></td>
+<% else %>
+<td colspan="2"></td>
+<% end %>
+<td colspan="2"><strong>DIAS A VENCER:</strong></td>
+<% if !@despesa.vencimento_nota.blank? %>
+<td><%= distance_of_time_in_words(@despesa.vencimento_nota, Time.now, true) %></td>
+</tr>
+<% else %>
+<td></td> 
+<% end %>
+
+</tbody>
+</table>

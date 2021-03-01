@@ -1,0 +1,34 @@
+<!-- <% @nome_cliente = [] %>
+<% @cliente.aliases.map { |e|
+ @nome_cliente << e.name
+  } %>
+
+<% @janeiro = Embarque.where("saida > '2016-01-01 00:00:00' and saida < '2016-02-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @fevereiro = Embarque.where("saida > '2016-02-01 00:00:00' and saida < '2016-03-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @março = Embarque.where("saida > '2016-03-01 00:00:00' and saida < '2016-04-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @abril = Embarque.where("saida > '2016-04-01 00:00:00' and saida < '2016-05-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @maio = Embarque.where("saida > '2016-05-01 00:00:00' and saida < '2016-06-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @junho = Embarque.where("saida > '2016-06-01 00:00:00' and saida < '2016-07-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @julho = Embarque.where("saida > '2016-07-01 00:00:00' and saida < '2016-08-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @agosto = Embarque.where("saida > '2016-08-01 00:00:00' and saida < '2016-09-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @setembro = Embarque.where("saida > '2016-09-01 00:00:00' and saida < '2016-10-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @outubro = Embarque.where("saida > '2016-10-01 00:00:00' and saida < '2016-11-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @novembro = Embarque.where("saida > '2016-11-01 00:00:00' and saida < '2016-12-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @dezembro = Embarque.where("saida > '2016-12-01 00:00:00' and saida < '2017-01-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+<% @total = Embarque.where("saida > '2016-01-01 00:00:00' and saida < '2017-01-01 00:00:00' and cliente IN (?)", @nome_cliente).count %>
+
+<b>Movimentação em 2016</b> </br>
+Janeiro:	<%= @janeiro %> </br>
+Fevereiro:	<%= @fevereiro %> </br>
+Março:		<%= @março %> </br>
+Abril:		<%= @abril %> </br>
+Maio:		<%= @maio %> </br>
+Junho:		<%= @junho %> </br>
+Julho:		<%= @julho %> </br>
+Agosto:		<%= @agosto %> </br>
+Setembro:	<%= @setembro %> </br>
+Outubro:	<%= @outubro %> </br>
+Novembro:	<%= @novembro %> </br>
+Dezembro:	<%= @dezembro %> </br>
+<b> Total do ano: <%= @total %> </b>
+-->

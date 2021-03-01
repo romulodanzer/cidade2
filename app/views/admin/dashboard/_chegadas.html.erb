@@ -1,0 +1,19 @@
+
+<% @chegadas = Viagem.find(:all, :conditions => ["fim_viagem > ? and inicio_viagem < fim_viagem and trecho_id = ?", Date.today-2, trecho.trecho_id],:order => "fim_viagem DESC" ) %>
+
+<div>
+
+<div>
+<% if !@chegadas.blank? %>
+  Chegou em <%= trecho.trecho.destino %> nas ultimas 48 horas,
+  <% for item in @chegadas %>
+  	<b><%= item.navio.name %> </b>
+  	- <%= item.fim_viagem.strftime('%d/%m/%Y %H:%M') %>,
+  <% end %>
+<% else %>
+  Não chegaram rebocadores nas ultimas 48 horas.
+<% end %>
+</div>
+
+
+</div>

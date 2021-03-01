@@ -1,0 +1,185 @@
+<%= javascript_include_tag "highcharts" %>
+
+<% if params[:q] %>
+ 
+        <% if params[:q][:data_gte] != nil and params[:q][:data_lte] != nil  %>
+
+          <% @data_ini = params[:q][:data_gte].to_date %>
+          <% @data_fim = params[:q][:data_lte].to_date %>
+          <% @periodo = params[:q][:data_gte].to_date..params[:q][:data_lte].to_date %>
+          <% @tipo_avaria = [] %>
+
+          <% TipoAvaria.all.each do |tipo| %>
+            <% if !tipo.avarias.where("data >= ? and data <= ?", @data_ini, @data_fim).blank? %>
+            <% @tipo_avaria << tipo %>
+            <% end %>
+          <% end %>
+    	
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+
+    <script type="text/javascript"> 
+	$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Total pesquisada por tipo de avaria no periodo Pesquisado'
+        },
+        xAxis: {
+            categories: <%= raw @tipo_avaria.map {|a| a.name } %>
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total fruit consumption'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -30,
+            verticalAlign: 'top',
+            y: 25,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: true,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                    style: {
+                        textShadow: '0 0 3px black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Belém',
+            data: <%= @tipo_avaria.map {|a| a.avarias.where("data >= ? and data <= ? and filial_id = 4", @data_ini.to_date, @data_fim.to_date).count } %>
+        },{
+            name: 'Ceasa',
+            data: <%= @tipo_avaria.map {|a| a.avarias.where("data >= ? and data <= ? and filial_id = 1", @data_ini.to_date, @data_fim.to_date).count } %>
+        },{
+            name: 'Porto Velho',
+            data: <%= @tipo_avaria.map {|a| a.avarias.where("data >= ? and data <= ? and filial_id = 3", @data_ini.to_date, @data_fim.to_date).count } %>
+        },{
+            name: 'Retroporto',
+            data: <%= @tipo_avaria.map {|a| a.avarias.where("data >= ? and data <= ? and filial_id = 2", @data_ini.to_date, @data_fim.to_date).count } %>
+        }
+                ]
+    });
+});
+
+</script>
+    	 		
+</div>
+
+     <% end %>
+ 
+ <% else %>
+ 
+"sem"
+          
+          <% @data_ini = Time.now-30.days %>
+          <% @data_fim = Time.now %>
+          <% @tipo_avaria = [] %>
+
+          <% TipoAvaria.all.each do |tipo| %>
+            <% if !tipo.avarias.where("data >= ? and data <= ?", @data_ini, @data_fim).blank? %>
+            <% @tipo_avaria << tipo %>
+            <% end %>
+          <% end %>
+        
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+
+    <script type="text/javascript"> 
+    $(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Total registradas por tipo de avaria nos ultimos 30 dias'
+        },
+        xAxis: {
+            categories: <%= raw @tipo_avaria.map {|a| a.name } %>
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Total fruit consumption'
+            },
+            stackLabels: {
+                enabled: true,
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+        },
+        legend: {
+            align: 'right',
+            x: -30,
+            verticalAlign: 'top',
+            y: 25,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+            borderColor: '#CCC',
+            borderWidth: 1,
+            shadow: false
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: true,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                    style: {
+                        textShadow: '0 0 3px black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Belém',
+            data: <%= @tipo_avaria.map {|a| a.avarias.where("data >= ? and data <= ? and filial_id = 4", @data_ini.to_date, @data_fim.to_date).count } %>
+        },{
+            name: 'Ceasa',
+            data: <%= @tipo_avaria.map {|a| a.avarias.where("data >= ? and data <= ? and filial_id = 1", @data_ini.to_date, @data_fim.to_date).count } %>
+        },{
+            name: 'Porto Velho',
+            data: <%= @tipo_avaria.map {|a| a.avarias.where("data >= ? and data <= ? and filial_id = 3", @data_ini.to_date, @data_fim.to_date).count } %>
+        },{
+            name: 'Retroporto',
+            data: <%= @tipo_avaria.map {|a| a.avarias.where("data >= ? and data <= ? and filial_id = 2", @data_ini.to_date, @data_fim.to_date).count } %>
+        }
+                ]
+    });
+});
+
+</script>
+                
+</div>
+
+
+<% end %>

@@ -1,0 +1,15 @@
+<% if params[:q][:ResponsavelSolicitacao_id_eq] != nil %>
+
+<% @responsavel = params[:q][:ResponsavelSolicitacao_id_eq] %>
+<% @ordens = OrdemDeServico.where("ResponsavelSolicitacao_id = ? and status = 'Pendente'", @responsavel).order(:navio_id) %>
+
+<h3>Lista de OS pendente para <%= ResponsavelSolicitacao.find(@responsavel).name %></h3>
+	<% if !@ordens.blank? %>
+		<% @ordens.each do |os| %>
+			
+			<p><h4><%= os.navio.name %> - <%= os.id %> - <%= os.data.strftime('%d/%m') %>   <h4></p>
+			<%= simple_format os.solicitacao %>
+			
+		<% end %>
+	<% end %>
+<% end %>

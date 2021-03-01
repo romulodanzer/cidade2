@@ -1,0 +1,105 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Abertura de Janela
+			</th>
+			<th>
+				Limite de Fechamento
+			</th>
+			<th>
+				Data da realização da Vistoria 
+			</th>
+			<th>
+				Arquivo digitalizado
+			</th>
+		</tr>
+	</thead>
+	<tbody>  
+		<tr>
+			<td>
+				<%= @certificado_de_casco_estrutura.renovacao_de_classe_abertura.strftime('%d/%m/%y') if !@certificado_de_casco_estrutura.renovacao_de_classe_abertura.blank? %>
+			</td>
+			<td>
+				<%= @certificado_de_casco_estrutura.renovacao_de_classe_fechamento.strftime('%d/%m/%y') if !@certificado_de_casco_estrutura.renovacao_de_classe_fechamento.blank? %>
+			</td>
+			<td>
+				<%= @certificado_de_casco_estrutura.renovacao_de_classe_realizado.strftime('%d/%m/%y') if !@certificado_de_casco_estrutura.renovacao_de_classe_realizado.blank? %>
+			</td>
+			<td>
+				<%= link_to("Ver arquivo", @certificado_de_casco_estrutura.renovacao_de_classe_anexo.url) if @certificado_de_casco_estrutura.renovacao_de_classe_anexo? %>
+			</td>
+		</tr>
+		<tr>
+ 
+			<td>
+				<% if !@certificado_de_casco_estrutura.renovacao_de_classe_abertura.blank? %>
+			<% if @certificado_de_casco_estrutura.renovacao_de_classe_abertura < Date.today %>
+        		<span class="vermelho">VENCIDO </span>
+        	<% else %>
+        		<% if @certificado_de_casco_estrutura.renovacao_de_classe_abertura > Date.today+30.days %>
+        			<span class="verde">EM DIA </span>
+        		<% else %>
+        			<span class="amarelo">ABERTURA PROXIMA </span>
+        		<% end %>
+        	<% end %>
+
+			<% end %>
+			</td>
+			<td>
+				<% if !@certificado_de_casco_estrutura.renovacao_de_classe_fechamento.blank? %>
+			<% if @certificado_de_casco_estrutura.renovacao_de_classe_fechamento < Date.today %>
+        		<span class="vermelho">VENCIDO </span>
+        	<% else %>
+        		<% if @certificado_de_casco_estrutura.renovacao_de_classe_fechamento > Date.today+30.days %>
+        			<span class="verde">EM DIA </span>
+        		<% else %>
+        			<span class="amarelo">ABERTURA PROXIMA </span>
+        		<% end %>
+        	<% end %>
+
+			<% end %>
+
+			</td>
+
+			<td>
+				<% if !@certificado_de_casco_estrutura.renovacao_de_classe_realizado.blank? %>
+			<% if @certificado_de_casco_estrutura.renovacao_de_classe_realizado < Date.today %>
+        		<span class="vermelho">VENCIDO </span>
+        	<% else %>
+        		<% if @certificado_de_casco_estrutura.renovacao_de_classe_realizado > Date.today+30.days %>
+        			<span class="verde">EM DIA </span>
+        		<% else %>
+        			<span class="amarelo">ABERTURA PROXIMA </span>
+        		<% end %>
+        	<% end %>
+        	<% else %>
+        		-
+			<% end %>
+			</td>
+			<td>
+				-
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+
+
+
+
+<style type="text/css">
+	.verde 
+{
+   background-color: #63DB2C;
+}
+	.vermelho
+	{
+		background-color: #DB4C2C;
+	}
+	.amarelo
+	{
+		background-color: #EDE72B;
+	}
+</style> 

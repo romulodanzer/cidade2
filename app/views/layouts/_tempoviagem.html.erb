@@ -1,0 +1,17 @@
+<% if viagem.fim_viagem != nil %>
+  
+  <%       @tempo = (viagem.fim_viagem-viagem.inicio_viagem)/3600/24 %>
+  <% @resultado = /(\d+)\.(\d+)/.match(@tempo.to_s)[1] + " dia(s) e " + /(\d+)\.(\d+)/.match((24 * ("0." + (/(\d+)\.(\d+)/.match(@tempo.to_s)[2])).to_d).to_s)[1] + " horas." %>
+  
+
+  <%= @resultado %>
+  
+  <% else %>
+     
+     <%    @tempo = (Time.now-viagem.inicio_viagem)/3600/24 %>
+     <% @resultado = /(\d+)\.(\d+)/.match(@tempo.to_s)[1] + " dia(s) e " + /(\d+)\.(\d+)/.match((24 * ("0." + (/(\d+)\.(\d+)/.match(@tempo.to_s)[2])).to_d).to_s)[1] + " horas." %>
+
+		        <%= @resultado %>
+
+
+     <% end %>

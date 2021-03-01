@@ -1,0 +1,126 @@
+<%= javascript_include_tag 'application' %> 
+
+<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<% @responsaveis = ResponsavelSolicitacao.all %>
+
+<script type="text/javascript"> 
+	$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Analise percentual de Solicitacoes'
+            },
+            xAxis: {
+                categories: <%= raw @responsaveis.map {|e| e.name } %>
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Porcentagem' 
+                }
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                shared: true
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'percent'
+                } 
+            },
+                series: [{
+                name: 'Abertas', 
+                data: <%= @responsaveis.map { |a| Solicitacao.where("ResponsavelSolicitacao_id = ? and situacao_id = 1", a.id ).count }  %>
+            }, {
+                name: 'Ag Compras',
+                data: <%= @responsaveis.map { |a| Solicitacao.where("ResponsavelSolicitacao_id = ? and situacao_id = 2", a.id ).count }  %>
+            }, { 
+                name: 'Concluidas',
+                data: <%= @responsaveis.map { |a| Solicitacao.where("ResponsavelSolicitacao_id = ? and situacao_id = 3", a.id ).count }  %>
+            }]
+        });
+    });
+    
+
+
+$(function () {
+        $('#container2').highcharts({
+            chart: {
+                type: 'column'
+            },
+            credits: {
+             enabled: false
+            },
+            title: {
+                text: 'Solicitações de Serviço Pendentes'
+            },
+            subtitle: {
+                text: ' '
+            },
+            xAxis: {
+                categories: <%= raw @responsaveis.map {|e| e.name } %>
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Numero de pedidos'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            legend: {
+                align: 'right',
+                x: -70,
+                verticalAlign: 'top',
+                y: 20,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +'</b><br/>'+
+                        this.series.name +': '+ this.y +'<br/>'+
+                        'Total: '+ this.point.stackTotal;
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                    } 
+                }
+            },
+            series: [{
+                name: 'Abertos',
+                data: <%= @responsaveis.map { |a| Solicitacao.where("ResponsavelSolicitacao_id = ? and situacao_id = 1", a.id ).count }  %>
+            }, {
+                name: 'Aguardando Compras', 
+                data: <%= @responsaveis.map { |a| Solicitacao.where("ResponsavelSolicitacao_id = ? and situacao_id = 2", a.id ).count }  %>
+            },
+             {
+                name: 'Concluidas', 
+                data: <%= @responsaveis.map { |a| Solicitacao.where("ResponsavelSolicitacao_id = ? and situacao_id = 3", a.id ).count }  %>
+            }] 
+        });
+    });
+
+
+
+
+
+</script>
+

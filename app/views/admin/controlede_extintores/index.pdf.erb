@@ -1,0 +1,141 @@
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+
+<% if @controlede_extintores.group_by { |x| x.embarcacao }.count > 1 %>
+
+<h1> Para emitir seu relatório a tela anterior deve mostrar dados de apenas um empurrador </h1>
+
+<% else %>
+
+
+<div class="nobreak">
+  <table width="1000">
+  <thead> 
+	<tr>
+	<th>
+	<img align="left" src="http://cidade.gestosat.com/45-Logo_Cidade_Transportes.JPG">
+	</th>
+	<th>
+	  <h3 align="left">CONTROLE DE INSPECÃO DE EXTINTOR DE INCÊNDIO </h3>
+	</th>
+	<th align="right" style="font-size:9px" >
+	  <small>Impresso <%= Time.now.to_formatted_s(:short) %> </small>
+	</th>
+	</tr>
+  </thead>
+  </table>
+  
+  <table width="1000">
+  <thead>
+        <tr>
+        <th align="left">
+          Embarcação: <%= @controlede_extintores.first.embarcacao.upcase %>
+        </th>
+	<th align="right">
+	  Data: <%= @controlede_extintores.first.created_at.to_formatted_s(:short) %>
+	</th>
+        </tr>
+  </thead>
+  </table>
+
+</div>
+
+      <table style="font-size:12px", border="1", border-style="dotted", width="1000">
+        <thead>
+          <tr>
+            <th>Numero</th> 
+	    <th>Registro</th>
+            <th>Tipo</th>
+            <th>Setor</th>
+            <th>Descarregado</th>
+            <th>Capacidade</th>
+            <th>Lacre</th>
+            <th>Difusor</th>
+            <th>Gatilho</th>
+            <th>Mangote</th>
+            <th>Manometro</th>
+            <th>Placa</th>
+            <th>Trava</th>
+            <th>Pro. Recarga</th>
+            <th>Piso</th>
+            <th>Obs</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% for extintor in @controlede_extintores %>
+          <tr>
+	    <td><%= extintor.numero_interno %></td>
+            <td><%= extintor.numero_do_registro %></td>
+            <td><%= extintor.tipo %></td>
+            <td><%= extintor.setor %></td>
+            <td><%= extintor.descarregado %></td>
+            <td><%= extintor.capacidade %></td>
+            <td><%= extintor.lacre %></td>
+            <td><%= extintor.difusor %></td>
+            <td><%= extintor.gatilho %></td>
+            <td><%= extintor.mangueira %></td>
+            <td><%= extintor.manometro %></td>
+            <td><%= extintor.placa %></td>
+            <td><%= extintor.trava %></td>
+            <td><%= extintor.proxima_recarga.strftime('%d/%m/%Y') %></td>
+            <td><%= extintor.piso %></td>
+            <td><%= extintor.observacao %></td>
+          </tr>
+        <% end %>
+        </tbody>
+	
+      </table>
+ <div style="font-size:12px">LEGENDA: N/C = NÃO CONFORME, N/A, NÃO SE APLICA </div>
+
+</br></br>
+<h5 align="right" > Responsável pela Inspeção assinado com senha pessoal: <%= @controlede_extintores.first.tecnico if @controlede_extintores.first.tecnico %></h5>
+
+<% end %>     
+</body>
+
+<style type="text/css">
+  
+  div.alwaysbreak { page-break-before: always; }
+  div.nobreak:before { clear:both; }
+  div.nobreak { page-break-inside: avoid; }
+
+ ul.img-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+ul.img-list li {
+  display: inline-block;
+  width: 320px;
+  height: 240px;
+  margin: 0;
+  position: relative;
+}
+
+span.text-content {
+  background: black;
+  color: white;
+  cursor: pointer;
+  display: table;
+  height: auto;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: auto;
+}
+ 
+span.text-content span {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+</style>
+
+</html> 

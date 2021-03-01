@@ -1,0 +1,61 @@
+
+<% @periodo = @paradas.last.inicio.to_date..@paradas.first.inicio.to_date %> 
+
+<% if @paradas.count < 180 %>
+
+    <%= javascript_include_tag "highcharts" %>
+
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+<script type="text/javascript">
+
+
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: 'Percentual de Motivo de Paradas'
+        },
+        tooltip: {
+            pointFormat: ': <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '',
+            data: [
+                ['Aguardando Demanda', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 2).count %>],     
+                ['Retirada de Coleta', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 3).count %>],     
+                ['Empurrador em Manutencao', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 4).count %>],
+                ['Mal Tempo', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 5).count %>],
+                ['Atraso da tripulacao', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 6).count %>],
+                ['Troca do Empurrador', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 7).count %>],
+                ['Aguardando documentacao', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 8).count %>],
+                ['Definição de Qtd de Carreteiros', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 9).count %>],
+                ['Troca de Turno', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 10).count %>],
+                ['Pausa para Refeicao', <%= Parada.where("inicio >= ? and inicio <= ? and razao_id = ?",@periodo.first, @periodo.last, 11).count %>]
+            ]
+        }]
+    });
+});
+</script>
+
+<% else %>
+ 
+<small>Para exibição de indicador, realize uma pesquisa na barra lateral</small> 
+
+<% end %>

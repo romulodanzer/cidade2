@@ -1,0 +1,14 @@
+<%= image_tag "/minilogo.png" %>
+<h3><%= @solicitacao.navio.name %></h3>
+
+<p>
+  <b>Responsável:</b>
+  <%= @solicitacao.ResponsavelSolicitacao.name %>
+</p>
+
+<p>
+  <b>Descricao:
+  <%= @solicitacao.descricao %>
+  </b>
+</p>
+

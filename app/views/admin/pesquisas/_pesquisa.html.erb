@@ -1,0 +1,12 @@
+<div >
+
+  <tr>
+    <% for i in 0..5 %>
+      <% @mes = Time.now-i.month %>
+      <td>
+        <%= link_to @mes.at_beginning_of_month.strftime("mes %m/%y"), "/admin/pesquisas?q[created_at_gte]=#{@mes.at_beginning_of_month.strftime("%Y-%m-%d")}&q[created_at_lte]=#{@mes.at_end_of_month.strftime("%Y-%m-%d")}&commit=Filtrar&order=id_desc" %>
+      </td>
+    <% end %>
+  </tr>
+
+</div>

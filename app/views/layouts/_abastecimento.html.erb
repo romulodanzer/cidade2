@@ -1,0 +1,23 @@
+<% if params[:q] %>
+<% if params[:q][:created_at_gte] and params[:q][:created_at_lte]%>
+
+<h3>Resumo de saídas de <%= params[:q][:created_at_gte].to_date.at_beginning_of_day.strftime('%d/%m %H:%M') %> até <%= params[:q][:created_at_lte].to_date.at_beginning_of_day.strftime('%d/%m %H:%M') %>.</h3>
+
+Total de Saídas por Unidades: </br>
+
+<% @abastecimento_corporativos.group(:filial).each do |t| %>
+
+<%= t.filial.upcase %>: <%= @abastecimento_corporativos.where(filial: t.filial).sum(:diesel) %> <%= number_to_currency(@abastecimento_corporativos.where(filial: t.filial).sum(:custo), :unit=> "R$", :format=> "%u %n", :separator=>",") %> </br>
+<% end %>
+</br>
+Total de Saídas por Origem: </br>
+<% @abastecimento_corporativos.group(:origem).each do |t| %>
+<%= t.origem %>: <%= @abastecimento_corporativos.where(origem: t.origem).sum(:diesel) %> <%= number_to_currency(@abastecimento_corporativos.where(origem: t.origem).sum(:custo), :unit=> "R$", :format=> "%u %n", :separator=>",") %>  </br>
+<% end %>
+</br>
+Total Geral de Saidas: </br>
+Todas as Saídas: <%= @abastecimento_corporativos.sum(:diesel) %> <%= number_to_currency(@abastecimento_corporativos.sum(:custo), :unit=> "R$", :format=> "%u %n", :separator=>",") %>  </br>
+</br>
+
+<% end %>
+<% end %>

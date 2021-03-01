@@ -1,0 +1,66 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Linha</th>
+      <th>Ativo</th>
+      <th>Inativo</th>
+      <th>Reativando</th>
+      <th>Parado</th>
+      <th>Total Geral</th>
+    </tr>
+  </thead>
+  <tbody>
+        <tr>
+          <th scope="row">Belém</th>
+          <td><%= Navio.where(status: "Ativo", linha_id: 2).count %></td>
+          <td><%= Navio.where(status: "Inativo", linha_id: 2).count %></td>
+          <td><%= Navio.where(status: "Reativando", linha_id: 2).count %></td>
+          <td><%= Navio.where(status: "Parado", linha_id: 2).count %></td>
+          <td><%= Navio.where(linha_id: 2).count %></td>
+        </tr>
+        <tr>
+          <th scope="row">Porto Velho</th>
+          <td><%= Navio.where(status: "Ativo", linha_id: 1).count %></td>
+          <td><%= Navio.where(status: "Inativo", linha_id: 1).count %></td>
+          <td><%= Navio.where(status: "Reativando", linha_id: 1).count %></td>
+          <td><%= Navio.where(status: "Parado", linha_id: 1).count %></td>
+          <td><%= Navio.where(linha_id: 1).count %></td>
+        </tr>
+        <tr>
+          <th scope="row">Praticagem</th>
+          <td><%= Navio.where(status: "Ativo", linha_id: 5).count %></td>
+          <td><%= Navio.where(status: "Inativo", linha_id: 5).count %></td>
+          <td><%= Navio.where(status: "Reativando", linha_id: 5).count %></td>
+          <td><%= Navio.where(status: "Parado", linha_id: 5).count %></td>
+          <td><%= Navio.where(linha_id: 5).count %></td>
+        </tr>
+        <tr>
+          <th scope="row">Manobra</th>
+          <td><%= Navio.where(status: "Ativo", linha_id: 4).count %></td>
+          <td><%= Navio.where(status: "Inativo", linha_id: 4).count %></td>
+          <td><%= Navio.where(status: "Reativando", linha_id: 4).count %></td>
+          <td><%= Navio.where(status: "Parado", linha_id: 4).count %></td>
+          <td><%= Navio.where(linha_id: 4).count %></td>
+        </tr>
+        <tr>
+          <th scope="row">Abastecimento</th>
+          <td><%= Navio.where(status: "Ativo", linha_id: 6).count %></td>
+          <td><%= Navio.where(status: "Inativo", linha_id: 6).count %></td>
+          <td><%= Navio.where(status: "Reativando", linha_id: 6).count %></td>
+          <td><%= Navio.where(status: "Parado", linha_id: 6).count %></td>
+          <td><%= Navio.where(linha_id: 6).count %></td>
+        </tr>
+        <tr>
+          <th scope="row">Total</th>
+          <td><%= Navio.where(status: "Ativo").count %></td>
+          <td><%= Navio.where(status: "Inativo").count %></td>
+          <td><%= Navio.where(status: "Reativando").count %></td>
+          <td><%= Navio.where(status: "Parado").count %></td>
+          <td><%= Navio.all.count %></td>
+        </tr>
+  </tbody>
+</table>
+
+<hr>
+
+<%= render 'layouts/pesquisa_pendencias' %>

@@ -1,0 +1,13 @@
+
+<% @json = Posicao.where("navio_id = ? and positiontime > ? and positiontime < ?", @navio.id, Time.now-4.hours, Time.now) %>
+
+<% if @json.count > 0 %> 
+
+<%= gmaps("markers" => { "data" => @json.compact.to_gmaps4rails }) %>
+
+<% end %>
+
+ 
+
+  
+  

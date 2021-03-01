@@ -1,0 +1,126 @@
+<% if @viagem.navio.rpm_config? %>
+    ﻿
+      <% if @viagem.fim_viagem == nil %>
+          <% @fim = Time.now  %>
+        <% else %>
+          <%  @fim = @viagem.fim_viagem %>
+      <% end %>
+
+    <% @conteudo = Mensagem.where("navio_id = ? and binarydatatype = '1' and rpm is not null and messagetime >= ? and messagetime <= ? ",@viagem.navio.codigo_rastreador, @viagem.inicio_viagem, @fim).order(:messagetime) %>
+
+    <% if !@conteudo.blank? %>
+        <!-- Navio permite leitura de rpm? -->
+        <% if @viagem.navio.rpm_config? %>
+                <!-- Inicio de config navio -->
+                <% if @viagem.navio.rpm_max != nil || @viagem.navio.rpm_min != nil %>
+
+                <% @contagem = @conteudo.count %>
+
+                <%= javascript_include_tag "highcharts" %>
+
+                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+                <script type="text/javascript">
+
+                Highcharts.setOptions({
+                    lang: {
+                        months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                        shortMonths: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        weekdays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        loading: ['Atualizando o gráfico...aguarde'],
+                        contextButtonTitle: 'Exportar gráfico',
+                        decimalPoint: ',',
+                        thousandsSep: '.',
+                        downloadJPEG: 'Baixar imagem JPEG',
+                        downloadPDF: 'Baixar arquivo PDF',
+                        downloadPNG: 'Baixar imagem PNG',
+                        downloadSVG: 'Baixar vetor SVG',
+                        printChart: 'Imprimir gráfico',
+                        rangeSelectorFrom: 'De',
+                        rangeSelectorTo: 'Para',
+                        rangeSelectorZoom: 'Zoom',
+                        resetZoom: 'Limpar Zoom',
+                        resetZoomTitle: 'Voltar Zoom para nível 1:1',
+                    },
+                    credits: {
+                      enabled: false
+                  }
+                });
+
+
+
+                $(function () {
+                    $('#container').highcharts({
+                        title: {
+                            text: 'Acompanhamento de RPM',
+                            x: -20 //center
+                        },
+                        subtitle: {
+                            text: 'Fonte: Autotrac',
+                            x: -20
+                        },
+                        xAxis: {
+                            categories: <%= raw @conteudo.map {|viagem| viagem.messagetime.strftime('%d/%m %H:%M') }.inspect %>
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'RPM'
+                            },
+                            plotLines: [{
+                                value: 0,
+                                width: 1,
+                                color: '#808080'
+                            }]
+                        },
+                        tooltip: {
+                            valueSuffix: 'rpm',
+                            enabled: true
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'middle',
+                            borderWidth: 0
+                        },
+                        series: [{
+                            name: 'Motor 1',
+                            data: <%= raw @conteudo.map {|viagem| viagem.rpm.to_i }.inspect %>
+                        },
+                        {
+                            name: 'Motor 2',
+                            data: <%= raw @conteudo.map {|viagem| viagem.velocity.to_i }.inspect %>
+                        },
+                        {
+                            name: 'rpm máximo',
+                            type: 'spline',
+                            color: '#38FF6A',
+                            dashStyle: 'shortdot',
+                            marker: {
+                              enabled: false
+                             },
+                            data: <%= [@viagem.navio.rpm_max]*@contagem %>
+                        },
+                        {
+                            name: 'rpm minimo',
+                            type: 'spline',
+                            color: '#AA4643',
+                            dashStyle: 'shortdot',
+                            marker: {
+                              enabled: false
+                             },
+                            data: <%= [@viagem.navio.rpm_min]*@contagem %>
+                        }]
+                    });
+                });
+                </script>
+                <% end %>
+                <!-- Fim de config navio -->
+        <% end %>
+        <!-- Fim de navio permite leitura -->
+    <% else %>
+    "Captacao de RPM confurada, mas sem posições sufientes para gerar graficos ou sem chegada de informacao de rpm. Favor verificar o rebocador"
+    <% end %>
+
+<% else %>
+ "Captacao de RPM desativada no cadastro do Navio."
+<% end %>

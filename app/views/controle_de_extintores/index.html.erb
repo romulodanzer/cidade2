@@ -1,0 +1,18 @@
+<h1>Importar Controle de Extintores do Excel</h1>
+
+<p>
+Nota: Somente sera importados registros utilizados na planilia conforme este modelo.
+</p>
+
+<h3>Requirementos</h3>
+<ul>
+  <li>Aqui você pode listar as validações que tem em vigor para o seu modelo</li>
+  <li>Dessa forma, seu usuário tem mais chances de uma importação bem-sucedida</li>
+</ul>
+
+<h5>Selecionar arquivo</h5>
+
+<%= form_tag import_controle_de_extintores_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import" %>
+<% end %>

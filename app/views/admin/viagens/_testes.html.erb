@@ -1,0 +1,105 @@
+<% if params[:q] != nil and params[:q][:inicio_viagem_gte] != nil and params[:q][:inicio_viagem_lte] != nil %>
+    <% if params[:q][:inicio_viagem_lte].to_date > params[:q][:inicio_viagem_gte].to_date %>
+
+        <%= javascript_include_tag "highcharts" %>
+
+        <% if !params[:q][:trecho_id_in].blank? %>
+
+ 
+
+                    <% for trecho in params[:q][:trecho_id_in] %>
+                                 <% @viagens = Viagem.where("inicio_viagem >= ? and inicio_viagem <= ? and trecho_id = ? and fim_viagem is not null",params[:q][:inicio_viagem_gte].to_date, params[:q][:inicio_viagem_lte].to_date, trecho) %>
+
+
+                               <div id="<%= trecho.to_s + 'div' %>" style="min-width: 200px; height: 400px; margin: 0 auto"></div>
+
+ 
+
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $('#<%= trecho.to_s + 'div' %>').highcharts({
+                                            chart: {
+                                                type: 'column',
+                                                margin: [ 50, 50, 100, 80]
+                                            },
+                                            title: {
+                                                text: <%= raw Trecho.find_by_id(trecho).name.inspect %>
+                                            },
+                                            subtitle: { text: 'Foram realizadas ' + <%= @viagens.count %> + ' viagens no periodo, com média de ' + <%= @viagens.map {|viagem| ((viagem.fim_viagem-viagem.inicio_viagem) / 1.hour).round }.inject{ |sum, el| sum + el }/Viagem.where("inicio_viagem >= ? and inicio_viagem <= ? and trecho_id = ? and fim_viagem is not null",params[:q][:inicio_viagem_gte].to_date, params[:q][:inicio_viagem_lte].to_date, trecho).map {|viagem| ((viagem.fim_viagem-viagem.inicio_viagem) / 1.hour).round }.size %> + ' horas por viagem.' },
+                                           credits: {
+                                                enabled: false
+                                            },
+
+                                            xAxis: {
+                                                categories: <%= raw @viagens.map {|viagem| viagem.navio.name }.inspect %>,
+                                                labels: {
+                                                    rotation: -45,
+                                                    align: 'right',
+                                                    style: {
+                                                        fontSize: '13px',
+                                                        fontFamily: 'Verdana, sans-serif'
+                                                    }
+                                                }
+                                            },
+                                            yAxis: {
+                                                min: 0,
+                                                title: {
+                                                    text: 'Tempo (hs)'
+                                                }
+                                            },
+                                            legend: {
+                                                enabled: false
+                                            },
+                                            tooltip: {
+                                                formatter: function() {
+                                                    return '<b>'+ this.x +'</b><br/>'+
+                                                        'Tempo de viagem: '+ Highcharts.numberFormat(this.y, 1) +
+                                                        ' horas';
+                                                }
+                                            },  
+                                            series: [{
+                                                name: '-',
+                                                data: <%= raw @viagens.map {|viagem| ((viagem.fim_viagem-viagem.inicio_viagem) / 1.hour).round }.inspect %>,
+                                                dataLabels: {
+                                                    enabled: true,
+                                                    rotation: -90,
+                                                    color: '#FFFFFF',
+                                                    align: 'right',
+                                                    x: 4,
+                                                    y: 10,
+                                                    style: {
+                                                        fontSize: '13px',
+                                                        fontFamily: 'Verdana, sans-serif'
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                name: 'Meta',
+                                                color: '#AA4643',
+                                                type: 'spline',
+                                                dashStyle: 'shortdot',
+                                                marker: { enabled: false } ,
+                                                data: <%= @viagens.map { |viagem| viagem.trecho.meta }.inspect %>
+                                            }]
+                                        });
+                                    });
+
+                                </script>
+
+
+
+                    <% end %>
+
+
+        <% end %>
+
+    <% else %>
+
+    A data final deve ser maior que a inicial.
+
+    <% end %>
+
+
+<% else %>
+    Para visualizar indicadores basta selecionar os filtros ao lado.
+<% end %>

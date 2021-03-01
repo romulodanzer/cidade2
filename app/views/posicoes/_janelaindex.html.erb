@@ -1,0 +1,26 @@
+<div class="panel-heading" id="panel-fundo">
+    <b class="panel-title"><%= posicao.navio.name %> </b><i><%= posicao.navio.viagens.last.id %></i> </br>
+    <%= distance_of_time_in_words(Time.now, posicao.navio.viagens.last.inicio_viagem, true) %> viajando.
+</div>
+<div class="body">
+  <b>Destino:</b> <%= posicao.navio.viagens.last.trecho.destino %> </br>
+  <b>Inicio de Viagem:</b> <%= posicao.navio.viagens.last.inicio_viagem.strftime("%d/%m %H:%M") %></br>
+  <b>Previsão:</b> <%= posicao.navio.viagens.last.previsao.strftime("%d/%m %H:%M") %></br>
+  <small> Falta(m) <%= distance_of_time_in_words(posicao.navio.viagens.last.previsao, Time.now, true) %> para chegar. </br>
+  Longitude: <%= posicao.longitude %> Latitude: <%= posicao.latitude %></br></small>
+</div>
+<div class="panel-footer" id="footer-color">
+   <small>Posição de: <%= distance_of_time_in_words(posicao.positiontime, Time.now, true) %> atrás.</br>
+   Próximo de: <%= @landmark %> </br> </small>
+    <% if current_user %>
+   <small><a href='<%= posicoes_path %>/<%= posicao.navio.viagens.last.id %>'>Rastro da viagem</a></small> </br>
+   <% end %>
+</div>
+
+
+
+
+
+                                                                  
+                                   
+                                 

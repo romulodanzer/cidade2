@@ -1,0 +1,54 @@
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+  <% if !@navios.nil? %>
+    <% @navios.each do |t| %>
+      <li><a data-toggle="tab" href='#<%= t.id %>'> <%= t.name %></a></li>
+    <% end %>
+  <% end %>
+</ul>
+
+<div class="tab-content">
+  <div id="home" class="tab-pane fade in active">
+      <h4>Selecione acima a categoria</h4>
+  </div>
+  <% if params[:search] %>
+    <% if !@navios.blank? %>
+        <% @navios.each do |t| %>
+          <div id='<%= t.id %>' class="tab-pane fade">
+              <h4><%= t.name %> </h4>
+              <!-- inicio de calculo para prazo -->
+              <% if !OrdemDeServico.where("status = ? and navio_id = ? and prazo is not null", "Pendente", t.id).order('prazo DESC').blank? %>
+              <i> Prazo: <%= OrdemDeServico.where("status = ? and navio_id = ? and prazo is not null", "Pendente", t.id).order('prazo DESC').first.prazo.strftime('%d/%m/%Y') %> </i>
+              <% end %>
+              <!-- fim de calculo para prazo -->
+              <!-- <posicao>  -->
+                <% if t.viagens.count > 0 %>
+                  <% if t.viagens.last.fim_viagem != nil %>
+                    <%  if t.viagens.last.trecho.destino? %>
+                      (<%= "Em " + t.viagens.last.trecho.destino + " faz " + time_ago_in_words(t.viagens.last.fim_viagem) %>)</br>
+                    <%  end %>
+                  <% else %>
+                  <%  if t.viagens.last.trecho.destino? %>
+                    (<%= "Chega em " + t.viagens.last.trecho.destino + " em " + distance_of_time_in_words(Time.now, t.viagens.last.previsao, true) %>)</br>
+                  <%  end %> 
+                <% end %>
+            <% end %>
+            
+              <!-- </posicao> -->
+          <% @os_navio = OrdemDeServico.where(:navio_id => t.id, status: 'pendente').order(:ResponsavelSolicitacao_id) %>
+            <% if @os_navio.count > 0 %>
+              <%  @os_navio.each do |s| %>
+                
+                  <b> <%= s.id %> - <%= s.ResponsavelSolicitacao.name %> - <%= s.data.strftime('%d/%m') %> </b>
+                  <%= simple_format s.solicitacao %>
+                
+              <% end %>
+            <% else %>
+                  Sem ordens de servico pendentes
+            <% end %>
+          </div>
+        <% end %> 
+    <% end %> 
+  <% end %> 
+   
+</div>

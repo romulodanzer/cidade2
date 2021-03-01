@@ -1,0 +1,133 @@
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+
+<% if @controlede_mangueiras.group_by { |x| x.embarcacao }.count > 1 %>
+
+<h1> Para emitir seu relatório a tela anterior deve mostrar dados de apenas um empurrador </h1>
+
+<% else %>
+
+
+<div class="nobreak">
+  <table width="1000">
+  <thead> 
+	<tr>
+	<th>
+	<img align="left" src="http://cidade.gestosat.com/45-Logo_Cidade_Transportes.JPG">
+	</th>
+	<th>
+	  <h3 align="left">CONTROLE DE INSPECÃO DE MANGUEIRAS DE INCÊNDIO </h3>
+	</th>
+	<th align="right" style="font-size:9px" >
+	  <small>Impresso <%= Time.now.to_formatted_s(:short) %> </small>
+	</th>
+	</tr>
+  </thead>
+  </table>
+  
+  <table width="1000">
+  <thead>
+        <tr>
+        <th align="left">
+          Embarcação: <%= @controlede_mangueiras.first.embarcacao.upcase %>
+        </th>
+	<th align="right">
+	  Data: <%= @controlede_mangueiras.first.created_at.to_formatted_s(:short) %>
+	</th>
+        </tr>
+  </thead>
+  </table>
+
+</div>
+
+      <table style="font-size:12px", border="1", border-style="dotted", width="1000">
+        <thead>
+          <tr>
+            <th>Localização</th> 
+	    <th>Fabricante</th>
+            <th>Fabricação</th>
+            <th>Teste Hidro.</th>
+            <th>Tipo</th>
+            <th>Comprimento</th>
+            <th>Diametro</th>
+            <th>Acoplamentos</th>
+            <th>Anel de Vedação</th>
+            <th>Acondicionamento</th>
+ 	    <th>Obs</th>
+          </tr>
+        </thead>
+        <tbody>
+        <% for extintor in @controlede_mangueiras %>
+          <tr>
+	    <td><%= extintor.localizacao %></td>
+            <td><%= extintor.fabricante %></td>
+            <td><%= extintor.fabricacao.strftime('%d/%m/%Y') %></td>
+            <td><%= extintor.teste_hidrostatico.strftime('%d/%m/%Y') %></td>
+            <td><%= extintor.tipo %></td>
+            <td><%= extintor.comprimento %></td>
+            <td><%= extintor.diametro %></td>
+            <td><%= extintor.acoplamentos %></td>
+            <td><%= extintor.anel_de_vedacao %></td>
+            <td><%= extintor.acondicionada_e_aduchada %></td>
+	    <td><%= extintor.observacao %>
+          </tr>
+        <% end %>
+        </tbody>
+	
+      </table>
+ <div style="font-size:12px">LEGENDA: N/C = NÃO CONFORME, N/A, NÃO SE APLICA </div>
+ <div style="font-size:12px"><b>Responsável pela Embarcação:</b> <%= @controlede_mangueiras.first.responsavel_pela_embarcacao  %> </div>
+
+
+</br></br>
+<h5 align="right" > Responsável pela Inspeção assinado com senha pessoal: <%= @controlede_mangueiras.first.tecnico if @controlede_mangueiras.first.tecnico %></h5>
+
+<% end %>     
+</body>
+
+<style type="text/css">
+  
+  div.alwaysbreak { page-break-before: always; }
+  div.nobreak:before { clear:both; }
+  div.nobreak { page-break-inside: avoid; }
+
+ ul.img-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+ul.img-list li {
+  display: inline-block;
+  width: 320px;
+  height: 240px;
+  margin: 0;
+  position: relative;
+}
+
+span.text-content {
+  background: black;
+  color: white;
+  cursor: pointer;
+  display: table;
+  height: auto;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: auto;
+}
+ 
+span.text-content span {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+</style>
+
+</html> 

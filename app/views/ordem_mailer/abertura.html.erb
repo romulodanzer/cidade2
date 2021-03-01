@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>  
+  <body>
+  <blockquote>
+    <h3><%= link_to("Aberta OS ##{@ordem.id} para filial #{@ordem.filial.name}", "http://ceasa.portochibatao.com.br" + admin_ordem_de_servico_path(@ordem.id).to_s) %></h3>
+    <p>
+      Informamos que dia <%= @ordem.updated_at.strftime('%d/%m %H:%M') %> ,o usuario <%= @ordem.user.name %> criou a nova ordem de serviço e marcou a mesma como <%= @ordem.status %>.
+    </p>  
+    <p><b>Rebocador:</b> <%= @ordem.navio.name %> </p>
+    <p><b>Setor/Responsavel:</b> <%= @ordem.ResponsavelSolicitacao.name %> </p>
+    <p><b>Solicitação:</b> <%= simple_format @ordem.solicitacao %> </p>
+    <p><b>Relator:</b> <%= simple_format @ordem.relator %> </p>
+    </br></br></br> 
+    </blockquote>
+    <p>Equipe Gestosat!</p><img src="https://s4.postimg.org/rc5zq7ytp/account_normal.png" alt="Gestosat.com" />
+  </body>  
+</html>

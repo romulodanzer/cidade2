@@ -1,0 +1,25 @@
+<% if !@viagem.siget.blank? %>
+	<% @array = @viagem.siget.split(",").map { |s| s.to_i } %> 
+	<% @total = Embarque.where(:viagemid => @array).count %> 
+		<% if @total > 0 %>
+		<h3> <%= @total.to_s + " de equipamentos embarcados conforme ultima sincronização:" %> </h3>
+			<% Embarque.where(:viagemid => @array).group(:cliente).each do |t| %>  
+				<% if !t.cliente.blank? %> <b>
+						<%= t.cliente + ": " + Embarque.where(:viagemid => @array, cliente: t.cliente).count.to_s %> </br> </b>
+						<% Embarque.where(:viagemid => @array, cliente: t.cliente).each do |placa| %> 
+						
+						<% if !placa.placa.blank? && !placa.tipo.blank? %> 
+						<%= placa.placa + " - " + placa.tipo %> </br> 
+						<% end %> 
+					<% end %> </br>
+				<% end %>
+			<% end %>
+ 
+		<% else %>
+		Dados ainda não foram sincronizados.
+		<% end %>
+
+<% end %> 
+
+
+

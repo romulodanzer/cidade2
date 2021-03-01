@@ -1,0 +1,36 @@
+<% if @viagem.fim_viagem == nil %>
+    <% @fim = Time.now  %>
+   <% else %>
+    <%  @fim = @viagem.fim_viagem %>
+<% end %>
+
+<% @mensagens = Mensagem.where("navio_id = ? and messagetime > ? and messagetime < ? and msgsubtype = ?", @viagem.navio_id, @viagem.inicio_viagem, @fim, "1001").compact %>
+
+<% if !@mensagens.blank? %>
+  <% for message in @mensagens %>
+
+    <b><%= message.messagetime.strftime('%d/%m/%Y %H:%M')  %>    </b></br>
+
+<% if message.macronumber == 2 %>
+    <div>
+    <%=  "07hs: " + message.text[0..19] %>
+    </div>
+    <div>
+   <%=  "15hs: " + message.text[20..39] %>
+    </div>
+    <div>
+    <%=  "20hs: " + message.text[40..59] %>
+    </div>
+    <div>
+    <%=  "ETA : " + message.text[60..64] + " " + message.text[65..66] + ":" + message.text[67..68] %>
+    </div>
+     <% else %>
+    <%= message.text %>    </b></br></br>
+    <% end %>
+
+  <% end %>
+
+
+<% else %>
+    "Sem mensagens durante a viagem"
+<% end %>

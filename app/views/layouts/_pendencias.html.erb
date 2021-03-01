@@ -1,0 +1,43 @@
+ <link rel="stylesheet" href="/css/bootstrap.min.css">
+ <% @ordens = OrdemDeServico.where(status: 'pendente').order(:ResponsavelSolicitacao_id) %>
+
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+  <% @ordens.group(:ResponsavelSolicitacao_id).each do |t| %>
+  <li><a data-toggle="tab" href='#<%= t.ResponsavelSolicitacao.id %>'> <%= t.ResponsavelSolicitacao.name %>, <%= OrdemDeServico.where(:ResponsavelSolicitacao_id => t.ResponsavelSolicitacao_id, status: 'pendente').count %></a></li>
+  <% end %>
+</ul>
+
+<div class="tab-content"> 
+    <div id="home" class="tab-pane fade in active">
+    <h4>Selecione o Responsavel</h4>
+    </div>
+
+  <% @ordens.group(:ResponsavelSolicitacao_id).each do |t| %>
+  	<div id='<%= t.ResponsavelSolicitacao.id %>' class="tab-pane fade">
+	    <h4><%= t.ResponsavelSolicitacao.name %> </h4>
+	      <%  OrdemDeServico.where(:ResponsavelSolicitacao_id => t.ResponsavelSolicitacao_id, status: 'pendente').order(:navio_id).each do |s| %>
+	      <b> <%= s.id %> - <%= s.navio.name %> - <%= s.data.strftime('%d/%m') %> </b> 
+          <% if s.navio.viagens.count > 0 %>
+          <% if s.navio.viagens.last.fim_viagem != nil %>
+            <%  if s.navio.viagens.last.trecho.destino? %>
+                (<%= "Em " + s.navio.viagens.last.trecho.destino + " faz " + time_ago_in_words(s.navio.viagens.last.fim_viagem) %>)</br>
+             <%  end %>
+          <% else %>
+            <%  if s.navio.viagens.last.trecho.destino? %>
+              (<%= "Chega em " + s.navio.viagens.last.trecho.destino + " em " + distance_of_time_in_words(Time.now, s.navio.viagens.last.previsao, true) %>)</br>
+            <%  end %> 
+          <% end %>
+          <% end %>
+
+	      <%= simple_format s.solicitacao %>
+      
+	      <% end %> 
+	<hr>	
+	</div>
+  
+    <% end %> 
+
+
+</div>

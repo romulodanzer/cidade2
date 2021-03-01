@@ -1,0 +1,83 @@
+    <%= javascript_include_tag "highcharts" %>
+<% if @viagens.count > 0 %>
+
+
+    <% for viagem in @viagens %>
+        <% if viagem.navio.rpm_config? %>
+            <% if viagem.navio.rpm_max != nil || viagem.navio.rpm_min != nil %>
+                <div id="<%= viagem.id.to_s + 'div' %>" style="min-width: 310px; height: 400px; margin: 0 auto"></div> 
+            <% end %>
+        <% end %>
+    <% end %>
+
+    <script type="text/javascript">
+        <% for viagem in @viagens %>
+        <% if viagem.navio.rpm_config? %>
+            <% if viagem.fim_viagem == nil %> 
+            <%       @fim = Time.now %>
+            <%     else %>
+            <%      @fim = viagem.fim_viagem %>
+            <%    end %>
+            <% @conteudo = Mensagem.where("navio_id = ? and binarydatatype = '1' and rpm is not null and messagetime >= ? and messagetime <= ? ",viagem.navio_id, viagem.inicio_viagem, @fim) %>
+            <% @contagem = @conteudo.count %>
+
+    $(function () {
+    $('#<%= viagem.id.to_s + 'div' %>').highcharts({
+        title: {
+            text: '<%= viagem.navio.name %>',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Fonte: Autotrac',
+            x: -20
+        },
+        xAxis: { 
+            categories: <%= raw @conteudo.map {|viagem| viagem.messagetime.strftime('%d/%m %H:%M') }.inspect %>
+        },
+        yAxis: {
+            title: {
+                text: 'RPM'
+            },
+            plotLines: [{ 
+                value: 0,
+                width: 1, 
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: 'rpm',
+            enabled: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{ 
+            name: 'Motor 1',
+            data: <%= raw @conteudo.map {|viagem| viagem.rpm.to_i }.inspect %>
+        },
+        {
+            name: 'Motor 2',
+            data: <%= raw @conteudo.map {|viagem| viagem.velocity.to_i }.inspect %>
+        },
+        {
+            name: 'rpm minimo',
+            type: 'spline',
+            color: '#AA4643',
+            data: <%= [viagem.navio.rpm_max]*@contagem %>
+        },
+        {
+            name: 'rpm maximo',
+            type: 'spline',
+            color: '#38FF6A',
+            data: <%= [viagem.navio.rpm_min]*@contagem %>
+        }]
+    });
+});
+            <% end %>
+        <% end %>
+        </script>
+
+    <% end %>

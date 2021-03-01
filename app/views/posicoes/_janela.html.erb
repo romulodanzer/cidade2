@@ -1,0 +1,14 @@
+<b> Detalhes da Posição </b> </br>
+<b> <%= posicao.navio.name %> </b>
+</hr>
+<div><b>Tempo de viagem:</b> <%= number_to_human(((posicao.positiontime-@viagem.inicio_viagem)/3600).to_i) %>hs</div>
+<div> 
+<b>Local:</b> <%= posicao.landmark %>
+</div> 
+<div> 
+<b>Hora na posicao:</b> <%= posicao.positiontime.strftime('%d/%m/%Y %H:%M') %>
+</div> 
+
+
+
+      

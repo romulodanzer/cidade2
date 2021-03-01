@@ -1,0 +1,372 @@
+<% entrada_hfo = MovimentoCombustivel.where(tipo_de_rancho_id: 1).sum(:hfo) %>
+<% saida_hfo = MovimentoCombustivel.where(tipo_de_rancho_id: 2).sum(:hfo) %>
+<% complemento_hfo = MovimentoCombustivel.where(tipo_de_rancho_id: 3).sum(:hfo) %>
+<% totais_hfo = (entrada_hfo - saida_hfo) - complemento_hfo %>
+
+<% entrada_diesel = MovimentoCombustivel.where(tipo_de_rancho_id: 1).sum(:diesel) %>
+<% saida_diesel = MovimentoCombustivel.where(tipo_de_rancho_id: 2).sum(:diesel) %>
+<% complemento_diesel = MovimentoCombustivel.where(tipo_de_rancho_id: 3).sum(:diesel) %>
+<% totais_diesel = (entrada_diesel - saida_diesel) - complemento_diesel %>
+
+<% entrada_hd68 = MovimentoCombustivel.where(tipo_de_rancho_id: 1).sum(:hd68) %>
+<% saida_hd68 = MovimentoCombustivel.where(tipo_de_rancho_id: 2).sum(:hd68) %>
+<% complemento_hd68 = MovimentoCombustivel.where(tipo_de_rancho_id: 3).sum(:hd68) %>
+<% totais_hd68 = (entrada_hd68 - saida_hd68) - complemento_hd68 %>
+
+<% entrada_lubrificante30 = MovimentoCombustivel.where(tipo_de_rancho_id: 1).sum(:lubrificante30) %>
+<% saida_lubrificante30 = MovimentoCombustivel.where(tipo_de_rancho_id: 2).sum(:lubrificante30) %>
+<% complemento_lubrificante30 = MovimentoCombustivel.where(tipo_de_rancho_id: 3).sum(:lubrificante30) %>
+<% totais_lubrificante30 = (entrada_lubrificante30 - saida_lubrificante30) - complemento_lubrificante30 %>
+
+<% entrada_lubrificante40 = MovimentoCombustivel.where(tipo_de_rancho_id: 1).sum(:lubrificante40) %>
+<% saida_lubrificante40 = MovimentoCombustivel.where(tipo_de_rancho_id: 2).sum(:lubrificante40) %>
+<% complemento_lubrificante40 = MovimentoCombustivel.where(tipo_de_rancho_id: 3).sum(:lubrificante40) %>
+<% totais_lubrificante40 = (entrada_lubrificante40 - saida_lubrificante40) - complemento_lubrificante40 %>
+
+<% entrada_lubrificante50 = MovimentoCombustivel.where(tipo_de_rancho_id: 1).sum(:lubrificante50) %>
+<% saida_lubrificante50 = MovimentoCombustivel.where(tipo_de_rancho_id: 2).sum(:lubrificante50) %>
+<% complemento_lubrificante50 = MovimentoCombustivel.where(tipo_de_rancho_id: 3).sum(:lubrificante50) %>
+<% totais_lubrificante50 = (entrada_lubrificante50 - saida_lubrificante50) - complemento_lubrificante50 %>
+
+<% entrada_gasolina = MovimentoCombustivel.where(tipo_de_rancho_id: 1).sum(:gasolina) %>
+<% saida_gasolina = MovimentoCombustivel.where(tipo_de_rancho_id: 2).sum(:gasolina) %>
+<% complemento_gasolina = MovimentoCombustivel.where(tipo_de_rancho_id: 3).sum(:gasolina) %>
+<% totais_gasolina = (entrada_gasolina - saida_gasolina) - complemento_gasolina %>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+
+<div style="width: 900px; height: 200px; margin: 0 auto">
+    <div id="container-1" style="width: 300px; height: 200px; float: left"></div>
+    <div id="container-2" style="width: 300px; height: 200px; float: left"></div>
+    <div id="container-3" style="width: 300px; height: 200px; float: left"></div>
+</div>
+<div style="width: 900px; height: 200px; margin: 0 auto">
+    <div id="container-4" style="width: 300px; height: 200px; float: left"></div>
+    <div id="container-5" style="width: 300px; height: 200px; float: left"></div>
+    <div id="container-6" style="width: 300px; height: 200px; float: left"></div>
+</div>
+<div style="width: 900px; height: 200px; margin: 0 auto">
+    <div id="container-7" style="width: 300px; height: 200px; float: left"></div>
+</div>
+
+<script>
+    
+var gaugeOptions = {
+
+    chart: {
+        type: 'solidgauge'
+    },
+
+    title: null,
+
+    pane: {
+        center: ['50%', '85%'],
+        size: '140%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+        }
+    },
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        stops: [
+            [0.1, '#DF5353'], // green
+            [0.5, '#DDDF0D'], // yellow
+            [0.9, '#55BF3B'] // red
+        ],
+        lineWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 2,
+        title: {
+            y: -70
+        },
+        labels: {
+            y: 16
+        }
+    },
+
+    plotOptions: {
+        solidgauge: {
+            dataLabels: {
+                y: 5,
+                borderWidth: 0,
+                useHTML: true
+            }
+        }
+    }
+};
+
+
+var gaugeOptions = {
+
+    chart: {
+        type: 'solidgauge'
+    },
+
+    title: null,
+
+    pane: {
+        center: ['50%', '85%'],
+        size: '140%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+        }
+    },
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        stops: [
+            [0.1, '#DF5353'], // green
+            [0.5, '#DDDF0D'], // yellow
+            [0.9, '#55BF3B'] // red
+        ],
+        lineWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 2,
+        title: {
+            y: -70
+        },
+        labels: {
+            y: 16
+        }
+    },
+
+    plotOptions: {
+        solidgauge: {
+            dataLabels: {
+                y: 5,
+                borderWidth: 0,
+                useHTML: true
+            }
+        }
+    }
+};
+
+// The HFO gauge
+var chartSpeed = Highcharts.chart('container-1', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 240000,
+        title: {
+            text: 'HFO'
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'HFO',
+        data: [<%= totais_hfo %>],
+        dataLabels: {
+            format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                   '<span style="font-size:12px;color:silver">Kg</span></div>'
+        },
+        tooltip: {
+            valueSuffix: ' KG'
+        }
+    }]
+
+}));
+
+
+// The Diesel gauge
+var chartSpeed = Highcharts.chart('container-2', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 105000,
+        title: {
+            text: 'Diesel'
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Diesel',
+        data: [<%= totais_diesel %>],
+        dataLabels: {
+            format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                   '<span style="font-size:12px;color:silver">Litros</span></div>'
+        },
+        tooltip: {
+            valueSuffix: ' KG'
+        }
+    }]
+
+}));
+
+// The Gasolina gauge
+var chartSpeed = Highcharts.chart('container-3', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 200,
+        title: {
+            text: 'Gasolina'
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Gasolina',
+        data: [<%= totais_gasolina %>],
+        dataLabels: {
+            format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                   '<span style="font-size:12px;color:silver">Litros</span></div>'
+        },
+        tooltip: {
+            valueSuffix: ' Litros'
+        }
+    }]
+
+}));
+
+
+// The HD68 gauge
+var chartSpeed = Highcharts.chart('container-4', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 1000,
+        title: {
+            text: 'HD68'
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'HD68',
+        data: [<%= totais_hd68 %>],
+        dataLabels: {
+            format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                   '<span style="font-size:12px;color:silver">Litros</span></div>'
+        },
+        tooltip: {
+            valueSuffix: ' Litros'
+        }
+    }]
+
+}));
+
+// The Lubrificante 30 gauge
+var chartSpeed = Highcharts.chart('container-5', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 1000,
+        title: {
+            text: 'Lubrificante 30'
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Lubrificante 30',
+        data: [<%= totais_lubrificante30 %>],
+        dataLabels: {
+            format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                   '<span style="font-size:12px;color:silver">Litros</span></div>'
+        },
+        tooltip: {
+            valueSuffix: ' Litros'
+        }
+    }]
+
+}));
+
+
+// The Lubrificante 40 gauge
+var chartSpeed = Highcharts.chart('container-6', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 1000,
+        title: {
+            text: 'Lubrificante 40'
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Lubrificante 40',
+        data: [<%= totais_lubrificante40 %>],
+        dataLabels: {
+            format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                   '<span style="font-size:12px;color:silver">Litros</span></div>'
+        },
+        tooltip: {
+            valueSuffix: ' Litros'
+        }
+    }]
+
+}));
+
+// The Lubrificante 50 gauge
+var chartSpeed = Highcharts.chart('container-7', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+        min: 0,
+        max: 1000,
+        title: {
+            text: 'Lubrificante 50'
+        }
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        name: 'Lubrificante 50',
+        data: [<%= totais_lubrificante50 %>],
+        dataLabels: {
+            format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                   '<span style="font-size:12px;color:silver">Litros</span></div>'
+        },
+        tooltip: {
+            valueSuffix: ' Litros'
+        }
+    }]
+
+}));
+
+</script>

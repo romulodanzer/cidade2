@@ -1,0 +1,33 @@
+<html>
+<head> 
+<script  src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>        // Calling jQuery Library hosted on Google's CDN
+<script type="text/javascript">
+
+$(function() {
+var addDiv = $('#addinput');
+var i = $('#addinput p').size() + 1;
+
+$('#addNew').live('click', function() {
+$('<p class="inline-hints">Balsa' + i +'</p></li><li class="file input optional" id="viagem_mapa_de_conves' + i +'_input"><label class=" label" for="viagem_mapa_de_conves' + i +'">Mapa de conves2</label><input id="viagem_mapa_de_conves' + i +'" name="viagem[mapa_de_conves' + i +']" type="file" />').appendTo(addDiv);
+i++;
+
+return false;
+});
+
+$('#remNew').live('click', function() {
+if( i > 2 ) {
+$(this).parents('p').remove();
+i--;
+}
+return false;
+});
+});
+
+</script>
+
+</head>
+
+
+<div id="addinput">
+<p class="inline-hints">Balsa 1</p></li><li class="file input optional" id="viagem_mapa_de_conves_input"><label class=" label" for="viagem_mapa_de_conves">Mapa de conves</label><input id="viagem_mapa_de_conves" name="viagem[mapa_de_conves]" type="file" /><a href="#" id="addNew">Add</a>
+</div>

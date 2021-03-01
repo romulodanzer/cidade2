@@ -1,0 +1,484 @@
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+ <%= javascript_include_tag "jquery" %>
+<%= javascript_include_tag "bootstrap" %>
+
+
+<div class="col-lg-11 col-sm-11">
+    <div class="card hovercard"> 
+        <div class="card-background">
+            <img class="card-bkimg" alt="" src="/img/headerchibata.png">
+            <!-- http://lorempixel.com/850/280/people/9/ -->        </div>
+        <div class="useravatar">
+            <img alt="" src="/logo-jf.png">
+        </div>
+        <div class="card-info"> <span class="card-title">JF de Oliveira Navegação Ltda</span>
+
+        </div>
+    </div>
+    <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            <button type="button" id="stars" class="btn btn-primary" href="#tab1" data-toggle="tab"><img class="card-bkimg" alt="" src="/img/bandeira-amazonas-105x75.png" width="52" height="38">
+                <div class="hidden-xs"> <b></b> Manaus - Amazonas </b> </div>
+            </button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab"><img class="card-bkimg" alt="" src="/img/bandeira-rondonia-105x74.png" width="52" height="38">
+                <div class="hidden-xs"> <b></b> Porto Velho - Rondonia </b> </div>
+            </button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><img class="card-bkimg" alt="" src="/img/bandeira-para-105x70.png" width="52" height="38">
+                <div class="hidden-xs"> <b></b> Belem - Para </b> </div>
+            </button>
+        </div>
+    </div>
+
+        <div class="well">
+      <div class="tab-content">
+        <div class="tab-pane fade in active" id="tab1">
+            <h3>Atracações previstas para o porto de Manaus</h3>
+            <small><%= Time.now.strftime("%d/%m/%y %H:%M") %></small>
+          <div class="container">
+<div>
+<div>
+          
+        	<div class="row">
+		      <div class="span5">
+            <table class="table table-striped table-condensed">
+                  <thead>
+                  <tr>
+                      <th>Navio</th>
+                      <th>Balsas</th>
+                      <th>Local</th>
+                      <th>Origem</th>                                          
+                      <th>Saida</th>                                          
+                      <th>Status</th>                                          
+                      <th>Previsto</th>                                          
+                  </tr>
+              </thead>   
+              <tbody>
+                <% @manaus = Viagem.where("fim_viagem IS NULL and trecho_id IN(2, 4)").order("previsao ASC") %>
+                <% if !@manaus.blank? %>
+                  <% for v in @manaus %>
+                  <%  if v.navio.posicoes.last != nil %>
+                  <% if v.navio.posicoes.last.positiontime > Time.now-3.hours %>
+                       <% if v.navio.posicoes.last.landmark == "NÃO HÁ REFERÊNCIAS PRÓXIMAS" %>
+                         <% @posicao = "Rastreador defeituoso.." %>
+                          <% else %>
+                             <% if /(.+[de,em]\s)(.+)(,\s\w+,(.+))/.match(v.navio.posicoes.last.landmark)[2] != nil %>
+                               <% @posicao = /(.+[de,em]\s)(.+)(,\s\w+,(.+))/.match(v.navio.posicoes.last.landmark)[2] %>
+                              <% else %>
+                               <% @posicao = "buscando local" %>
+                              <% end %>
+                        <% end %>
+                  <% else %>
+                    <% @posicao = "atualizando..." %>
+                  <% end %>
+                <% else %>
+                  <% "atualizando..." %>
+                <% end %>
+                    <tr>
+                        <td><%= v.navio.name %></td>
+                        <td>
+                        <% if v.carregamentos.count > 0 %>
+                          <% for carregamento in v.carregamentos %>
+                            <%= carregamento.balsa.name %> </br>
+                          <% end %>
+                        <% elsif v.embarques.count > 0  %>
+                         <% for embarque in v.embarques.group(:sbalsa) %>
+                            <%= embarque.sbalsa %> </br>
+                        <% end %>
+                        <% end %>
+                        </td>
+                        <td><%= @posicao %></td>
+                        <td><%= v.trecho.filial.name %></td>
+                        <td><%= v.inicio_viagem.strftime("%d/%m %H:%M") %></td>
+                        <% if v.previsao > (v.inicio_viagem+v.trecho.tempo_padrao.hours) %>
+                            <td>
+                              Previs&atilde;o
+                            </td>
+                            <td>
+                                <%= v.previsao.strftime('%d/%m') %>
+                            </td>    
+                        <% else %>
+            
+                        <% if v.previsao > Time.now+40.hour %>
+                            <td>
+                              Performance
+                            </td>
+                            <td>
+                            <%= (v.inicio_viagem+v.trecho.tempo_padrao.hours).strftime('%d/%m') %>
+                            </td>
+                  	    <% elsif v.previsao < Time.now+31.hours %> 
+                  	       <td>
+                            Previs&atilde;o
+                            </td>
+                          <td>
+                          <%= v.previsao.strftime('%d/%m %H:%M') %>
+                          </td>
+                  	<% else %>
+                  		  <td>
+                          Previs&atilde;o
+                        </td>
+                        <td>
+                          <%= v.previsao.strftime('%d/%m') %>
+                        </td>
+                  	<% end %>  
+              <% end %>
+                                                              
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table> 
+            </div>
+            <!-- chega bel  -->
+          <% @chegamao = Viagem.find(:all, :conditions => ["fim_viagem > ? and inicio_viagem < fim_viagem and trecho_id IN(2, 4)", Date.today-2],:order => "fim_viagem DESC" ) %>
+          <% if !@chegamao.blank? %>
+           <small> Chegou em Manaus nas ultimas 48 horas, </small>
+            <% for item in @chegamao %>
+              <b><%= item.navio.name %> </b>
+              <small>- <%= item.fim_viagem.strftime('%d/%m/%Y %H:%M') %>,</small>
+            <% end %>
+          <% else %>
+           <small> Não chegaram rebocadores nas ultimas 48 horas.</small>
+          <% end %>
+          
+          </div>
+          </div>
+          <!-- chega bel fim  -->
+	</div>
+	 
+</div>
+</div>
+
+        <div class="tab-pane fade in" id="tab2">
+          <h3>Atracações previstas para o porto de Porto Velho.</h3>
+           <small><%= Time.now.strftime("%d/%m/%y %H:%M") %></small>
+          <div class="container">
+<div>
+<div>
+          
+        	<div class="row">
+		      <div class="span5">
+            <table class="table table-striped table-condensed">
+                  <thead>
+                  <tr>
+                      <th>Navio</th>
+                      <th>Balsas</th>
+                      <th>Local</th>
+                      <th>Origem</th>                                          
+                      <th>Saida</th>                                          
+                      <th>Status</th>                                          
+                      <th>Previsto</th>                                          
+                  </tr>
+              </thead>   
+              <tbody>
+                <% @pvh = Viagem.where("fim_viagem IS NULL and trecho_id IN(3)").order("previsao ASC") %>
+                <% if !@pvh.blank? %>
+                  <% for v in @pvh %>
+                  <%  if v.navio.posicoes.last != nil %>
+                  <% if v.navio.posicoes.last.positiontime > Time.now-3.hours %>
+                       <% if v.navio.posicoes.last.landmark == "NÃO HÁ REFERÊNCIAS PRÓXIMAS" %>
+                         <% @posicao = "Rastreador defeituoso.." %>
+                          <% else %>
+                             <% if /(.+[de,em]\s)(.+)(,\s\w+,(.+))/.match(v.navio.posicoes.last.landmark)[2] != nil %>
+                               <% @posicao = /(.+[de,em]\s)(.+)(,\s\w+,(.+))/.match(v.navio.posicoes.last.landmark)[2] %>
+                              <% else %>
+                               <% @posicao = "buscando local" %>
+                              <% end %>
+                        <% end %>
+                  <% else %>
+                    <% @posicao = "atualizando..." %>
+                  <% end %>
+                <% else %>
+                  <% "atualizando..." %>
+                <% end %>
+                    <tr>
+                        <td><%= v.navio.name %></td>
+                        <td>
+                        <% if v.carregamentos.count > 0 %>
+                          <% for carregamento in v.carregamentos %>
+                            <%= carregamento.balsa.name %> </br>
+                          <% end %>
+                        <% elsif v.embarques.count > 0  %>
+                         <% for embarque in v.embarques.group(:sbalsa) %>
+                            <%= embarque.sbalsa %> </br>
+                        <% end %>
+                        <% end %>
+                        </td>
+                        <td><%= @posicao %></td>
+                        <td><%= v.trecho.filial.name %></td>
+                        <td><%= v.inicio_viagem.strftime("%d/%m %H:%M") %></td>
+                        <% if v.previsao > (v.inicio_viagem+v.trecho.tempo_padrao.hours) %>
+        <td>
+              Previs&atilde;o
+            </td>
+          <td>
+              <%= v.previsao.strftime('%d/%m') %>
+          </td>    
+    <% else %>
+
+          <% if v.previsao > Time.now+40.hour %>
+            <td>
+              Performance
+            </td>
+            <td>
+              <%= (v.inicio_viagem+v.trecho.tempo_padrao.hours).strftime('%d/%m') %>
+            </td>
+      	<% elsif v.previsao < Time.now+31.hours %> 
+      	     <td>
+              Previs&atilde;o
+            </td>
+            <td>
+              <%= v.previsao.strftime('%d/%m %H:%M') %>
+            </td>
+      	<% else %>
+      		  <td>
+              Previs&atilde;o
+            </td>
+            <td>
+              <%= v.previsao.strftime('%d/%m') %>
+            </td>
+      	<% end %>  
+  <% end %>
+                                                              
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+            </div>
+            <!-- chega bel  -->
+          <% @chegapvh = Viagem.find(:all, :conditions => ["fim_viagem > ? and inicio_viagem < fim_viagem and trecho_id IN(3)", Date.today-2],:order => "fim_viagem DESC" ) %>
+          <% if !@chegapvh.blank? %>
+           <small> Chegou em Porto Velho nas ultimas 48 horas, </small>
+            <% for item in @chegapvh %>
+              <b><%= item.navio.name %> </b>
+            <small>  - <%= item.fim_viagem.strftime('%d/%m/%Y %H:%M') %>,</small>
+            <% end %>
+          <% else %>
+           <small> Não chegaram rebocadores nas ultimas 48 horas.</small>
+          <% end %>
+          </div>
+          </div>
+          <!-- chega bel fim  -->
+	</div>
+</div>
+        </div>
+        <div class="tab-pane fade in" id="tab3">
+          <h3>Atracações previstas para o porto de Belem</h3>
+           <small><%= Time.now.strftime("%d/%m/%y %H:%M") %></small>
+          <div class="container">
+<div>
+<div>
+          
+        	<div class="row">
+		      <div class="span5">
+            <table class="table table-striped table-condensed">
+                  <thead>
+                  <tr>
+                      <th>Navio</th>
+                      <th>Balsas</th>
+                      <th>Local</th>
+                      <th>Origem</th>                                          
+                      <th>Saida</th>                                          
+                      <th>Status</th>                                          
+                      <th>Previsto</th>                                          
+                  </tr>
+              </thead>   
+              <tbody>
+                <% @belem = Viagem.where("fim_viagem IS NULL and trecho_id IN(1)").order("previsao ASC") %>
+                <% if !@belem.blank? %>
+                  <% for v in @belem %>
+                  <%  if v.navio.posicoes.last != nil %>
+                  <% if v.navio.posicoes.last.positiontime > Time.now-3.hours %>
+                       <% if v.navio.posicoes.last.landmark == "NÃO HÁ REFERÊNCIAS PRÓXIMAS" %>
+                         <% @posicao = "Rastreador defeituoso.." %>
+                          <% else %>
+                             <% if /(.+[de,em]\s)(.+)(,\s\w+,(.+))/.match(v.navio.posicoes.last.landmark)[2] != nil %>
+                               <% @posicao = /(.+[de,em]\s)(.+)(,\s\w+,(.+))/.match(v.navio.posicoes.last.landmark)[2] %>
+                              <% else %>
+                               <% @posicao = "buscando local" %>
+                              <% end %>
+                        <% end %>
+                  <% else %>
+                    <% @posicao = "atualizando..." %>
+                  <% end %>
+                <% else %>
+                  <% "atualizando..." %>
+                <% end %>
+                    <tr>
+                        <td><%= v.navio.name %></td>
+                        <td>
+                        <% if v.carregamentos.count > 0 %>
+                          <% for carregamento in v.carregamentos %>
+                            <%= carregamento.balsa.name %> </br>
+                          <% end %>
+                        <% elsif v.embarques.count > 0  %>
+                         <% for embarque in v.embarques.group(:sbalsa) %>
+                            <%= embarque.sbalsa %> </br>
+                        <% end %>
+                        <% end %>
+                        </td>
+                        <td><%= @posicao %></td>
+                        <td><%= v.trecho.filial.name %></td>
+                        <td><%= v.inicio_viagem.strftime("%d/%m %H:%M") %></td>
+                        <% if v.previsao > (v.inicio_viagem+v.trecho.tempo_padrao.hours) %>
+        <td>
+              Previs&atilde;o
+            </td>
+          <td>
+              <%= v.previsao.strftime('%d/%m') %>
+          </td>    
+    <% else %>
+
+          <% if v.previsao > Time.now+40.hour %>
+            <td>
+              Performance
+            </td>
+            <td>
+              <%= (v.inicio_viagem+v.trecho.tempo_padrao.hours).strftime('%d/%m') %>
+            </td>
+      	<% elsif v.previsao < Time.now+31.hours %> 
+      	     <td>
+              Previs&atilde;o
+            </td>
+            <td>
+              <%= v.previsao.strftime('%d/%m %H:%M') %>
+            </td>
+      	<% else %>
+      		  <td>
+              Previs&atilde;o
+            </td>
+            <td>
+              <%= v.previsao.strftime('%d/%m') %>
+            </td>
+      	<% end %>  
+  <% end %>
+                                                              
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+            </div>
+            <!-- chega bel  -->
+          <% @chegabel = Viagem.find(:all, :conditions => ["fim_viagem > ? and inicio_viagem < fim_viagem and trecho_id IN(1)", Date.today-2],:order => "fim_viagem DESC" ) %>
+          <% if !@chegabel.blank? %>
+           <small> Chegou em Belem nas ultimas 48 horas,</small>
+            <% for item in @chegabel %>
+              <b><%= item.navio.name %> </b>
+            <small>  - <%= item.fim_viagem.strftime('%d/%m/%Y %H:%M') %>,</small>
+            <% end %>
+          <% else %>
+           <small> Não chegaram rebocadores nas ultimas 48 horas.</small>
+          <% end %>
+          </div>
+          </div>
+          <!-- chega bel fim  -->
+	</div>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    </div>
+            
+
+<style>
+  /* USER PROFILE PAGE */
+ .card {
+    margin-top: 20px;
+    padding: 30px;
+    background-color: rgba(214, 224, 226, 0.2);
+    -webkit-border-top-left-radius:5px;
+    -moz-border-top-left-radius:5px;
+    border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
+    -moz-border-top-right-radius:5px;
+    border-top-right-radius:5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.card.hovercard {
+    position: relative;
+    padding-top: 0;
+    overflow: hidden;
+    text-align: center;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, 1);
+}
+.card.hovercard .card-background {
+    height: 130px;
+}
+.card-background img {
+    -webkit-filter: blur(25px);
+    -moz-filter: blur(25px);
+    -o-filter: blur(25px);
+    -ms-filter: blur(25px);
+    filter: blur(25px);
+    margin-left: -100px;
+    margin-top: -200px;
+    min-width: 130%;
+}
+.card.hovercard .useravatar {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+}
+.card.hovercard .useravatar img {
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.5);
+}
+.card.hovercard .card-info {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+}
+.card.hovercard .card-info .card-title {
+    padding:0 5px;
+    font-size: 20px;
+    line-height: 1;
+    color: #262626;
+    background-color: rgba(255, 255, 255, 0.1);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.card.hovercard .card-info {
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 20px;
+    color: #737373;
+    text-overflow: ellipsis;
+}
+.card.hovercard .bottom {
+    padding: 0 20px;
+    margin-bottom: 17px;
+}
+.btn-pref .btn {
+    -webkit-border-radius:0 !important;
+}
+
+
+</style>
+
+<script>
+  $(document).ready(function() {
+$(".btn-pref .btn").click(function () {
+    $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
+    // $(".tab").addClass("active"); // instead of this do the below 
+    $(this).removeClass("btn-default").addClass("btn-primary");   
+});
+});
+</script>

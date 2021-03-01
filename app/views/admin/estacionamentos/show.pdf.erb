@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= csrf_meta_tags %>
+  </head>
+<table style="height: 125px;" width="800">
+<tbody>
+<tr>
+<td><img src="http://ceasa.portochibatao.com.br/logo-jf.png" alt="logojf" width="150" height="96" /></td>
+<td colspan="2">
+<h2 style="text-align: center;">&nbsp;</h2>
+<h2 style="text-align: left;">Autorização de Estacionamento</h2>
+</td>
+<td><img src="http://www.sindarma.org.br/web/imagens/posts/45/45-Logo_Cidade_Transportes.JPG" alt="logojf" width="177" height="96" /></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td style="text-align: right;" colspan="3">&nbsp;</td>
+</tr>
+<tr>
+<td><strong>Filial: </strong><%= resource.user.filiais.first.name %></td>
+<td style="text-align: right;" colspan="3"><strong>&nbsp; VALIDADE: <%= resource.validade.to_formatted_s(:short).upcase %> </strong></td>
+</tr>
+<tr>
+<td><strong>Autorizado por: </strong><%= resource.user.name  %> </td>
+<td style="text-align: left;" colspan="2"><strong>Empresa: </strong><%= resource.empresa  %></td>
+<td style="text-align: right;"><strong> ID: </strong> #<%= resource.id %> </td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Nome: &nbsp;</strong><%= resource.nome %> 
+<p><strong>RG: </strong><%= resource.rg %></p>
+<p><strong>Placa: &nbsp;</strong><%= resource.placa %></p>
+<p><strong>Empresa: </strong><%= resource.empresa %></p>
+<p>Descri&ccedil;&atilde;o</p>
+<%= simple_format(resource.motivo) %>
+<hr />
+<small>A JF DE OLIVEIRA NAVEGAÇÃO não se responsabiliza por ocorrências relativas aos veículos estacionados, inclusive
+por quaisquer danos, como roubo, furto ou extravio de partes, peças, ferramentas, acessórios
+removíveis, sobressalentes ou quaisquer objetos deixados no interior ou sobre o veículo.
+Por necessidade operacional, A JF DE OLIVEIRA NAVEGAÇÃO, a qualquer tempo, poderá cancelar a Permissão de
+Utilização do Estacionamento, ora concedida.</small>
+<hr />
+<br /><br />
+<table style="height: 50px;" width="774">
+<tbody>
+<tr>
+<td style="text-align: center;">__________________________________</td>
+<td>&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</td>
+<td style="text-align: center;">__________________________________</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><%= resource.nome %></strong></td>
+<td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</td>
+<td style="text-align: center;"><strong><%= resource.user.name %></strong></td>
+</tr>
+</tbody>
+</table>
+
+
+
+<style type="text/css">
+  
+ ul.img-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+ul.img-list li {
+  display: inline-block;
+  width: 213px;
+  height: 160px;
+  margin: 0;
+  position: relative;
+}
+
+span.text-content {
+  background: black;
+  color: white;
+  cursor: pointer;
+  display: table;
+  height: auto;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: auto;
+}
+ 
+span.text-content span {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+</style>
+

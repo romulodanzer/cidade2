@@ -1,0 +1,17 @@
+<% for navio in Navio.find.all.order("name") %>
+    <% if navio.viagens.count > 0 %>
+    	<% if navio.viagens.last.fim_viagem == nil %>
+    		<%= navio.name %>
+    		<%= navio.solicitacoes.find(:all, :conditions =>["situacao_id = 1 or situacao_id = 2"]).count %> solicitacoes abertas</br>
+    	
+    		<% for solicitacao in navio.solicitacoes.find(:all, :conditions =>["situacao_id = 1 or situacao_id = 2"]) %>
+    		<%= solicitacao.ResponsavelSolicitacao.name %> </br>
+
+
+    		<% end %>
+
+    	</br></br>
+    	</ul>
+    	<% end %>
+    <% end %>
+<% end %>

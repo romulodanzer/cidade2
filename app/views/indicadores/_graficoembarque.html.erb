@@ -1,0 +1,59 @@
+<% @periodo = 6.weeks.ago.to_date..Date.today %>   
+
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div> 
+ 
+<script type="text/javascript">
+$(function () {
+  Highcharts.setOptions({
+    lang: {
+      months: ['Janeiro', 'Fevereiro', 'março', 'Abril', 'Maio', 'Junho', 
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+      weekdays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'],
+      shortMonths: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', "Dez"]
+    }
+  });
+
+  new Highcharts.Chart({
+    chart: { renderTo: 'container' },
+    title: { text: 'Previsoes vs Recebido' },
+    subtitle: { text: 'Gráfico comparativo com reservas realizadas por clientes contra o numero de carretas enviadas' },
+    xAxis: { type: 'datetime' },
+    yAxis: {
+      title: { text: 'Equipamentos' }
+    },
+        credits: {
+    enabled: false
+    },
+
+    series: [{
+      name: "Previsoes",
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= @periodo.first.at_midnight.to_i * 1000 %>,
+      data: <%= (@periodo).map { |date| AnaliseCritica.previsto_on(date).to_f}.inspect %>
+    },
+    {
+      name: "Recebimento",
+      pointInterval: <%= 1.day * 1000 %>, 
+      pointStart: <%= @periodo.first.at_midnight.to_i * 1000 %>,
+      data: <%= (@periodo).map { |date| Embarque.entrada_mao_on(date).to_f}.inspect %>
+    },
+    {
+      name: "Meta",
+      type: 'spline',
+      color: '#AA4643',
+      pointInterval: <%= 1.day * 1000 %>,
+      pointStart: <%= @periodo.first.at_midnight.to_i * 1000 %>,
+      marker: { 
+          enabled: false
+       },
+       dashStyle: 'shortdot',
+      data: <%= (@periodo).map { |date| AnaliseCritica.meta.to_f}.inspect %>
+    }
+    ]
+  });
+});
+
+</script>
+
+
+

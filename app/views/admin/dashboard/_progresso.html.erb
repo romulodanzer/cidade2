@@ -1,0 +1,24 @@
+<!-- <link rel="stylesheet" href="/css/bootstrap.min.css"> -->
+ 
+<% if viagem.trecho_id == 1 %>
+<% @desempenho = viagem.trecho.desempenhos.where("longitude > ?", viagem.navio.posicoes.last.longitude).order('Percentual DESC').first %>
+  <% if !@desempenho.nil? %>
+    <% unless @desempenho.nil? %>
+      <div class="progress-bar" role="progressbar" aria-valuenow=<%= 100-@desempenho.percentual %> aria-valuemin="0" aria-valuemax="100" style="width:<%= 100-@desempenho.percentual %>%">
+        <span class="sr-only"><%= 100-@desempenho.percentual %>%</span>
+      </div> 
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if viagem.trecho_id == 2 %>
+  <% @desempenho = viagem.trecho.desempenhos.where("longitude < ?", viagem.navio.posicoes.last.longitude).order('Percentual DESC').first %>
+  <% if !@desempenho.nil? %>
+    <% unless @desempenho.nil? %>
+      <div class="progress-bar" role="progressbar" aria-valuenow=<%= 100-@desempenho.percentual %> aria-valuemin="0" aria-valuemax="100" style="width:<%= 100-@desempenho.percentual %>%">
+        <span class="sr-only"><%= 100-@desempenho.percentual %>%</span>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+

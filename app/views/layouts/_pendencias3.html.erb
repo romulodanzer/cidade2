@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<% @navios = Navio.all %>
+<% @nalista = [] %>
+<% @chegando = [] %>
+<% @noporto = [] %>
+
+<% for navio in @navios %>
+    <% if !navio.viagens.last.nil? %>
+        <% if navio.viagens.last.trecho_id == 2 or navio.viagens.last.trecho_id == 4 %>
+            <% @nalista << navio %>    
+        <% end %>
+    <% end %>
+<% end %>
+
+<% for navio in @nalista %>
+    <% if navio.viagens.last.fim_viagem.blank? %>
+        <% if navio.viagens.last.previsao < Time.now+2.days %>
+            <% @chegando << navio %>
+        <% end %>
+    <% else %>
+        <% @noporto << navio %>
+    <% end %>
+<% end %> 
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">Chegando prox(48hs)</a></li>
+  <li><a data-toggle="tab" href="#menu1">Em Manaus <%= @noporto.count %></a></li>
+</ul>
+
+<div class="tab-content"> 
+  <div id="home" class="tab-pane fade in active">
+    <h4>Chegando prox(48hs)</h4>
+    <% if !@chegando.blank? %>
+      <% @chegando.each do |t| %>
+    	    <strong><%= t.name %> (<%= "Chega em " + t.viagens.last.trecho.destino + " em " + distance_of_time_in_words(Time.now, t.viagens.last.previsao, true) %>)</strong>
+    	    </br>
+    	    </br>
+    	      <%  OrdemDeServico.where(:navio_id => t.id, status: 'pendente').order(:ResponsavelSolicitacao_id).each do |s| %>
+      	      <b> <%= s.id %> - <%= s.ResponsavelSolicitacao.name %> - <%= s.data.strftime('%d/%m') %> </b>
+    	        <p><%= simple_format s.solicitacao %> </p>
+    	     <% end %> 
+    	<hr>	
+      <% end %>  
+    <% end %> 
+  </div>
+  <div id="menu1" class="tab-pane fade">
+    <h4>Em Manaus <%= @noporto.count %></h4>
+    <% if !@noporto.blank? %>
+  <% @noporto.each do |t| %>
+	    <strong><%= t.name %> (<%= "Em " + t.viagens.last.trecho.destino + " faz " + time_ago_in_words(t.viagens.last.fim_viagem) %>)</strong>
+	    </br>
+	      <%  OrdemDeServico.where(:navio_id => t.id, status: 'pendente').order(:ResponsavelSolicitacao_id).each do |s| %>
+	      <b> <%= s.id %> - <%= s.ResponsavelSolicitacao.name %> - <%= s.data.strftime('%d/%m') %> </b>
+	      <p><%= simple_format s.solicitacao %> </p>
+	      <% end %> 
+  	<hr>	
+    <% end %> 
+  <% end %>
+  </div>
+</div>
+
+
+
+
+ 
+ 

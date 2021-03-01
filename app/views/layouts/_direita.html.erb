@@ -1,0 +1,32 @@
+<ul class="nav navbar-nav pull-right">
+        <% if can? :create, Viagem %>
+        <!-- alertas de viagens -->
+        <li class="nav-item btn-group" data-behavior="alertas">
+          <a class="dropdown-toggle nav-link" type="button" data-behavior="alertas-link" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            
+            <i class="fab fa-github"></i><span data-behavior="alerta-count"></span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu1" data-behavior="alerta-viagens">
+
+          </div>
+        </li>  
+        <!-- fim de alertas de viagens -->
+        <% end %>
+
+        <% if can? :read, Mensagem %>
+        <!-- alertas de mensagens -->
+        <li class="nav-item btn-group" data-behavior="notifications">
+          <a class="dropdown-toggle nav-link" type="button" data-behavior="notifications-link" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            
+            <i class="fab fa-envelope-o"></i><span data-behavior="alerta-count"></span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2" data-behavior="notification-items">
+
+          </div>
+        </li>
+        <!-- fim de alertas de mensagens -->
+        <% end %>
+   	    <li><a href="#"><span class="glyphicon glyphicon-user"></span> <%= current_user.name %></a></li>
+        <li class="nav-item"><a href="/users/sign_out"><span class="glyphicon glyphicon-log-in"></span> Sair</a></li>
+
+</ul> 

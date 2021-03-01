@@ -1,0 +1,46 @@
+
+	<% if viagem.fim_viagem %>
+		<% @tempoviagem = ((viagem.fim_viagem - viagem.inicio_viagem) / 1.hour).round %>
+		<% @tempo = (viagem.fim_viagem-viagem.inicio_viagem)/3600/24 %>
+	  	<% @resultado = /(\d+)\.(\d+)/.match(@tempo.to_s)[1] + " dia(s) e " + /(\d+)\.(\d+)/.match((24 * ("0." + (/(\d+)\.(\d+)/.match(@tempo.to_s)[2])).to_d).to_s)[1] + " horas." %>
+
+	<% else %>
+		<% @tempoviagem = ((Time.now - viagem.inicio_viagem) / 1.hour).round %>
+		<% @tempo = (Time.now-viagem.inicio_viagem)/3600/24 %>
+		<% @resultado = /(\d+)\.(\d+)/.match(@tempo.to_s)[1] + " dia(s) e " + /(\d+)\.(\d+)/.match((24 * ("0." + (/(\d+)\.(\d+)/.match(@tempo.to_s)[2])).to_d).to_s)[1] + " horas." %>
+    <% end %>
+
+	<% if @tempoviagem > viagem.trecho.meta+24 %>
+    	<% @cor = "vermelho" %>
+   	<% else %>
+       	<%  if @tempoviagem < viagem.trecho.meta %>
+           	<% @cor = "verde" %>
+       	<% else %>
+           	<% @cor = "amarelo" %>
+		<% end %>
+	<% end %>
+
+     	<span class="<%= @cor %>">
+        <%= (@tempoviagem).to_s + " horas" %></br>
+        </span>
+        <%= @resultado %>
+
+
+<style type="text/css">
+	.verde
+{
+   background-color: #63DB2C;
+}
+	.vermelho
+	{
+		background-color: #DB4C2C;
+	}
+	.amarelo
+	{
+		background-color: #EDE72B;
+	}
+	.azul
+	{
+		background-color: #0066FF;
+	}
+</style>

@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+ 
+<div class="container">
+  <div class="row" id="pwd-container">
+    <div class="col-md-4"></div>
+    
+    <div class="col-md-4">
+      <section class="login-form">
+
+        <%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => '', :role => 'login' }) do |f| %>
+          <img src="/45-Logo_Cidade_Transportes.JPG" class="img-responsive" alt="" />
+        
+
+            <% if flash[:alert] %>
+          <div class="alert alert-danger" role="alert">
+              <%= flash[:alert] %>
+            </div>
+            <% end %>
+
+          <%= f.input :email, label: false, :placeholder => "Email", required: true, :input_html => {:class => "form-control input-lg" } %>
+          <%= f.input :password, label: false, :placeholder => "Senha", :input_html => {:class => "form-control input-lg"} %>
+
+          <% if devise_mapping.rememberable? -%>
+            <div class="field">
+              <%= f.check_box :remember_me %>
+              <%= f.label :remember_me %>
+            </div>
+          <% end %>        
+         
+                              
+          <%= f.submit :Entrar, :class => "btn btn-lg btn-primary btn-block", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Entrando..."} %>
+            <a href="maito://romulodanzer@gmail.com">Solicitar cadastro</a>
+          </div>
+    <% end %>
+
+
+        <div class="form-links">
+          <a href="#">www.grupocidade.com</a>
+        </div>
+      </section>  
+      </div>
+      
+      <div class="col-md-4"></div>
+      
+
+  </div>
+  
+  <p>
+    <a href="http://www.gestosat.com" target="_blank"><small>Desenvolvido por Gestosat</small><sup>®</sup></a>
+    <br>
+    <br>
+    
+  </p>     
+  
+  
+</div>
+
+<style type="text/css">
+    @CHARSET "UTF-8";
+/*
+over-ride "Weak" message, show font in dark grey
+*/
+
+.progress-bar {
+    color: #333;
+} 
+
+/*
+Reference:
+http://www.bootstrapzen.com/item/135/simple-login-form-logo/
+*/
+
+* {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+    outline: none;
+}
+
+    .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+        @include box-sizing(border-box);
+
+        &:focus {
+          z-index: 2;
+        }
+    }
+
+body {
+    background: url('http://1.bp.blogspot.com/-YRI-uzNfAw4/Vl3piWCcTqI/AAAAAAAAAho/rVMOP4wGgNU/s1600/cruzeiro.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.login-form {
+    margin-top: 60px;
+}
+
+form[role=login] {
+    color: #5d5d5d;
+    background: #f2f2f2;
+    padding: 26px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+    form[role=login] img {
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 35px;
+    }
+    form[role=login] input,
+    form[role=login] button {
+        font-size: 18px;
+        margin: 16px 0;
+    }
+    form[role=login] > div {
+        text-align: center;
+    }
+    
+.form-links {
+    text-align: center;
+    margin-top: 1em;
+    margin-bottom: 50px;
+}
+    .form-links a {
+        color: #fff;
+    }
+
+</style>

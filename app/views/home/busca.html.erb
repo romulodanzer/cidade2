@@ -1,0 +1,107 @@
+
+
+
+<table align="center">
+<tbody>
+<tr>
+<td><img src="http://ceasa.portochibatao.com.br/logo-jf.png" alt="logo jf" width="129" height="90" /></td>
+<td>
+<h2>Rastreamento de Carga Fluvial</h2>
+</td>
+<td>
+<td><img src="http://www.sindarma.org.br/web/imagens/posts/45/45-Logo_Cidade_Transportes.JPG" alt="logo jf" width="129" height="90" /></td>
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+
+<table align="center">
+<tbody>
+<tr>
+
+<td>
+<%= form_tag home_busca_path, :method => 'get' do %>
+  <p>
+    <%= text_field_tag :search, params[:search], :placeholder => "Código de Rastreamento" %>
+    <%= submit_tag "Buscar", :name => nil %>
+  </p>
+<% end %>
+</td>
+</tr>
+</tbody>
+</table>
+
+<% if !@placas.blank? %>
+
+
+	<% if !@posicao.blank? and @viagem.fim_viagem.blank? %>
+	<script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' /> 
+
+ 
+<script src='/js/leaflet.awesome-markers.js'></script>
+<script src="/js/leaflet.extra-markers.min.js"></script>
+
+<link href='/css/leaflet.awesome-markers.css' rel='stylesheet' />
+<link href='/css/font-awesome.css' rel='stylesheet' />
+ <link rel="stylesheet" href="/css/leaflet.extra-markers.min.css">
+
+	<table align="center">
+			<tbody>
+				<tr>
+				<td><%= render "layouts/mapa_rastreio" %></td>
+				</tr>
+				</tbody>
+				</table>
+	<% end %>
+	
+	
+	<% @placas.each do |t|  %>
+
+		<table align="center">
+		<tbody>
+			<tr>
+				<td colspan="2" align="center"><strong><%= t.cliente %></strong></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><strong><%= t.placa %> - <%= t.trecho %></strong></td>
+			</tr>
+			<% if !t.entrada.blank? %>			
+			<tr>
+				<td><%= t.entrada.strftime("%d/%m/%y %H:%M") %></td>
+				<td>Recebida no pátio para embarque.</td>
+			</tr>
+			<% end %>			
+			<% if !@viagem.blank? %>			
+			<tr>
+				<td><%= @viagem.inicio_viagem.strftime("%d/%m/%y %H:%M") %></td>
+				<td>Iniciou a viagem com destino a <strong><%= @viagem.trecho.destino %></strong> no rebocador <strong><%= @viagem.navio.name %></strong>, na balsa <strong><%= t.sbalsa %></strong>.</td>
+			</tr>
+				<% if !@viagem.fim_viagem.blank? %>	
+					<tr>
+						<td><%= @viagem.fim_viagem.strftime("%d/%m/%y %H:%M") %></td>
+						<td>Chegou no seu destino em <strong><%= @viagem.trecho.destino %></strong>!</td>
+					</tr>
+				<% else %>
+					<tr>
+						<td><%= Time.now.strftime("%d/%m/%y %H:%M") %></td>
+						<td>Está navegando para <strong><%= @viagem.trecho.destino %></strong> fazem <%= distance_of_time_in_words(Time.now, @viagem.inicio_viagem, true) %>, com previsão de chegada estimada para daqui a <%= distance_of_time_in_words(@viagem.previsao, Time.now, true) %>.</td>
+					</tr>	
+				<% end %>	
+			<% end %>	
+			
+		</tbody>
+		</table>
+
+	<% end %>
+	
+	<% else %>
+	<h2> Desculpe!</h2>
+	<h3>Código de rastreamento inválido!</h3>
+
+<% end %> 
+
+
+

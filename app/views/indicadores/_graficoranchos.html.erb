@@ -1,0 +1,114 @@
+<%= javascript_include_tag 'application' %> 
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+<% @periodo = 3.weeks.ago.at_beginning_of_month.to_date..Date.today.at_beginning_of_month %>
+
+<script type="text/javascript">
+$(function () {
+    
+        var colors = Highcharts.getOptions().colors,
+            categories = ['Belém', 'Porto Velho', 'Manobra'],
+            name = 'Linhas',
+            data = [{
+                    y: <%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id IN(2,3) and trecho_id = 1",@periodo.first, @periodo.last).count %>, 
+                    color: colors[0],
+                    drilldown: {
+                        name: 'Belém',
+                        categories: ['Normal', 'Complemento'],
+                        data: [<%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id = 2 and trecho_id = 1",@periodo.first, @periodo.last).count %>, <%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id = 3 and trecho_id = 1",@periodo.first, @periodo.last).count %>],
+                        color: colors[0]
+                    }
+                },
+                {
+                    y: <%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id IN(2,3) and trecho_id = 3",@periodo.first, @periodo.last).count %>,
+                    color: colors[1],
+                    drilldown: {
+                        name: 'Porto Velho',
+                        categories: ['Normal', 'Complemento'],
+                        data: [<%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id = 2 and trecho_id = 3",@periodo.first, @periodo.last).count %>, <%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id = 3 and trecho_id = 3",@periodo.first, @periodo.last).count %>],
+                        color: colors[1]
+                    }
+                },
+                 {
+                    y: <%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id IN(2,3) and trecho_id = 5",@periodo.first, @periodo.last).count %>,
+                    color: colors[2],
+                    drilldown: {
+                        name: 'Manobra',
+                        categories: ['Normal', 'Complemento'],
+                        data: [<%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id = 2 and trecho_id = 5",@periodo.first, @periodo.last).count %>, <%= ControleDeRancho.where("data >= ? and data <= ? and tipo_de_rancho_id = 3 and trecho_id = 5",@periodo.first, @periodo.last).count %>],
+                        color: colors[2]
+                    }
+                }];
+    
+    
+        // Build the data arrays
+        var browserData = [];
+        var versionsData = [];
+        for (var i = 0; i < data.length; i++) {
+    
+            // add browser data
+            browserData.push({
+                name: categories[i],
+                y: data[i].y,
+                color: data[i].color
+            });
+    
+            // add version data
+            for (var j = 0; j < data[i].drilldown.data.length; j++) {
+                var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5 ;
+                versionsData.push({
+                    name: data[i].drilldown.categories[j],
+                    y: data[i].drilldown.data[j],
+                    color: Highcharts.Color(data[i].color).brighten(brightness).get()
+                });
+            }
+        }
+    
+        // Create the chart
+        $('#container').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Entrega de Ranchos'
+            },
+            yAxis: {
+                title: {
+                    text: 'Total percent market share'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    shadow: false,
+                    center: ['50%', '50%']
+                }
+            },
+            tooltip: {
+                valueSuffix: '%'
+            },
+            series: [{
+                name: 'Total Linha',
+                data: browserData,
+                size: '60%',
+                dataLabels: {
+                    formatter: function() {
+                        return this.y > 5 ? this.point.name : null;
+                    },
+                    color: 'white',
+                    distance: -30
+                }
+            }, {
+                name: 'Total/Tipo/Linha',
+                data: versionsData,
+                size: '80%',
+                innerSize: '60%',
+                dataLabels: {
+                    formatter: function() {
+                        // display only if larger than 1
+                        return this.y > 1 ? '<b>'+ this.point.name +':</b> '+ this.y +'%'  : null;
+                    }
+                }
+            }]
+        });
+    });
+</script>
