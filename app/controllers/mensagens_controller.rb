@@ -1,5 +1,5 @@
 class MensagensController < ApplicationController
- skip_before_filter :authenticate_user!, :only => [:feed]
+ skip_before_action :authenticate_user!, :only => [:feed]
 
   # GET /mensagens
   # GET /mensagens.json
