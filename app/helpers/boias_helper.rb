@@ -1,0 +1,2 @@
+module BoiasHelper
+end

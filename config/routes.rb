@@ -4,7 +4,11 @@ Rails.application.routes.draw do
     resources :controle_de_extintores do 
     collection { post :import }
     end
-  
+    
+    resources :boias, :only => [:index] 
+    resources :boias do 
+    collection { post :import }
+    end  
     
     #root :to => "posicoes#index"
     root to: "admin/dashboard#index"
