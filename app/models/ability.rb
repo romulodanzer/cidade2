@@ -22,7 +22,7 @@ class Ability
                   #fim de balsa
 
                   #controles do sesmt
-                  can :read, Pesquisa if user.controle_de_extintor_lvl >= 1
+                  #can :read, Pesquisa if user.controle_de_extintor_lvl >= 1
                   can :read, ControleDeExtintor if user.controle_de_extintor_lvl >= 1
                   can :create, ControleDeExtintor if user.controle_de_extintor_lvl >= 2
                   can :manage, ControleDeExtintor if user.controle_de_extintor_lvl >= 3
@@ -53,12 +53,12 @@ class Ability
                   can :update, Navio if user.navio_lvl >= 3
                   #fim de navio
                   #inicio ordem de serviço
-                  can :read, OrdemDeServico if user.ordem_de_servico_lvl >= 1
-                  can :read, ActiveAdmin::Page, :name => "Pendente Departamento" if user.ordem_de_servico_lvl >= 1
-                  can :read, ActiveAdmin::Page, :name => "Pendente Rebocador" if user.ordem_de_servico_lvl >= 1
-                  can :read, ActiveAdmin::Page, :name => "Pendentes Manaus" if user.ordem_de_servico_lvl >= 1
-                  can [:update, :create], OrdemDeServico if user.ordem_de_servico_lvl >= 2
-                  can :destroy, OrdemDeServico if user.ordem_de_servico_lvl >= 3
+                  #can :read, OrdemDeServico if user.ordem_de_servico_lvl >= 1
+                  #can :read, ActiveAdmin::Page, :name => "Pendente Departamento" if user.ordem_de_servico_lvl >= 1
+                  #can :read, ActiveAdmin::Page, :name => "Pendente Rebocador" if user.ordem_de_servico_lvl >= 1
+                  #can :read, ActiveAdmin::Page, :name => "Pendentes Manaus" if user.ordem_de_servico_lvl >= 1
+                  #can [:update, :create], OrdemDeServico if user.ordem_de_servico_lvl >= 2
+                  #can :destroy, OrdemDeServico if user.ordem_de_servico_lvl >= 3
                   #fim de ordem de serviço
                   #permissao de viagens
                   can :read, Viagem if user.viagem_lvl >= 1
