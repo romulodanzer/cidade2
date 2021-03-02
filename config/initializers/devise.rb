@@ -216,6 +216,7 @@ Devise.setup do |config|
   # Warn on the last attempt before the account is locked.
   # config.last_attempt_warning = true
   config.secret_key = 'b5d58935b061ae8c1119b373f0fe951c1947fd29673b5dd2b6121ecfb0f516c35734d5f4751ca18a56f8ed6c5d0395ae6aa398ed9192c1047e84730668181d5e'
+  secret_key_base = '5d58935b061ae8c1119b373f0fe951c1947fd29673b5dddasd3434dsfsdf4444sdfsdf234sdfdsed6c5d0395ae6aa398ed9192c1047e84730668181d5e'
 
   # ==> Configuration for :recoverable
   #
