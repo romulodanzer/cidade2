@@ -13,7 +13,7 @@ class BoiasController < ApplicationController
     
     def import
       Boia.import(params[:file])
-      redirect_to admin_controlede_boias_path, notice: "Extintores importados."
+      redirect_to admin_controlede_boias_path, notice: "Boias e Aparelhos importados(as)"
     end
 end
 

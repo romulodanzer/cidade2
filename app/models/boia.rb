@@ -8,7 +8,7 @@ class Boia < ActiveRecord::Base
   scope :este_mes, -> { where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) }
 
   def self.import(file)
-    @erros = []
+    @erros = 0
     @total = 0
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
@@ -55,7 +55,7 @@ class Boia < ActiveRecord::Base
             created_at: row["Data da inspecao"])
             @total += 1
       else
-        @erros << i
+        @erros += 1
       end
     end
  end
