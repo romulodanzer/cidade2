@@ -14,6 +14,7 @@ class Ability
                    can :manage, ActiveAdminComment
                    can :manage, Attach
                    #fim de dashboard e anexos
+                   can :manage, User, id: user.id
 
                   #inicio de balsa
                   can :read, Balsa if user.balsa_lvl >= 1
