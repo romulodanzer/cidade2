@@ -65,15 +65,22 @@ column :fabricante
 #	end
 #end
 column "Próx. Recarga",:proxima_recarga, :sortable => :proxima_recarga do |v|
-      if v.proxima_recarga <= Date.today
-        div :class => "fvermelho" do status_tag(v.proxima_recarga.strftime('%d/%m/%Y'), class: 'error') end
-      else
-      if v.proxima_recarga < Date.today+1.month
-          div :class => "famarelo" do status_tag(v.proxima_recarga.strftime('%d/%m/%Y'), class: 'warning') end
-      else
-        div :class => "fverde" do status_tag(v.proxima_recarga.strftime('%d/%m/%Y'), class: 'ok') end
-      end
-	    end
+    
+	if v.proxima_recarga.blank?
+		""
+	else
+		if v.proxima_recarga < Date.today
+			div :class => "fvermelho" do status_tag(v.proxima_recarga.strftime('%d/%m/%Y'), class: 'error') end
+		else
+		if v.proxima_recarga < Date.today+1.month
+			div :class => "famarelo" do status_tag(v.proxima_recarga.strftime('%d/%m/%Y'), class: 'warning') end
+		else
+			div :class => "fverde" do status_tag(v.proxima_recarga.strftime('%d/%m/%Y'), class: 'ok') end
+		end
+		end
+
+	end
+
   end
 column "Cap.", :capacidade
 column "Itens",:difusor, :sortable => :difusor do |t|

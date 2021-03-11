@@ -50,12 +50,12 @@ column :fabricante
 column "Validade",:validade, :sortable => :validade do |v|
 	if v.validade?
 	if v.validade <= Date.today
-        div :class => "fvermelho" do status_tag(v.validade.strftime('%d/%m/%Y'), class: 'error') end
+        div do status_tag(v.validade.strftime('%d/%m/%Y'), class: 'error') end
       else
       if v.validade < Date.today+1.month
-          div :class => "famarelo" do status_tag(v.validade.strftime('%d/%m/%Y'), class: 'warning') end
+          div do status_tag(v.validade.strftime('%d/%m/%Y'), class: 'warning') end
       else
-        div :class => "fverde" do status_tag(v.validade.strftime('%d/%m/%Y'), class: 'ok') end
+        div do status_tag(v.validade.strftime('%d/%m/%Y'), class: 'ok') end
       end
             end
 	end

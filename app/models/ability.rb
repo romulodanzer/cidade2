@@ -39,7 +39,7 @@ class Ability
                   #fcontroles do sesmt
 
                   #inicio de filial
-                  can :read, Filial if user.filial_lvl >= 1
+                  can :read, Filial
                   can :create, Filial if user.filial_lvl >= 2
                   can :update, Filial if user.filial_lvl >= 3
                   #fim de filial
