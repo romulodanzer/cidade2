@@ -3,9 +3,9 @@ class User < ActiveRecord::Base
   #has_and_belongs_to_many :filiais, :join_table => :users_filiais
 
   belongs_to :resource, :polymorphic => true
-  has_and_belongs_to_many :filiais
+  #has_and_belongs_to_many :filiais
   #has_many :ordem_de_servicos
-  validates_presence_of :controle_de_extintor_lvl, :mensagem_lvl, :navio_lvl, :viagem_lvl
+  validates_presence_of :email, :name
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,

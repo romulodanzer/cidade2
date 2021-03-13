@@ -29,7 +29,6 @@ class ControleDeExtintor < ActiveRecord::Base
                                                         embarcacao: row["Embacarcao"],
                                                         tipo_de_embarcacao: "BM",
                                                         tipo: row["Tipo"],
-                                                        numero_do_registro: row["Selo do In Metro"],
                                                         numero_interno: row["N do Extintor"],
                                                         setor: row["Localizacao"],
                                                         capacidade: row["capacidade extintora KGs"],

@@ -12,7 +12,7 @@ filter :embarcacao
 filter :tecnico
 filter :fabricante
 filter :n_de_serie
-filter :created_at, :label => "Vistoriado em"
+filter :created_at, :label => "Vistoriado em", as: :date_time_range
 
 controller do
  def index

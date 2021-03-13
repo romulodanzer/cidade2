@@ -54,8 +54,8 @@ pt-BR:
       button_label: "Ações em lote"
       delete_confirmation: "Tem certeza que deseja excluir estes %{plural_model}? Não é possível desfazer esta ação."
       succesfully_updated:
-          one: "Atualizado(a) com sucesso"
-          other: "Atualizados(as) com sucesso"
+        one: "Atualizado(a) com sucesso"
+        other: "Atualizados(as) com sucesso"
       succesfully_destroyed:
         one: "Excluiu com sucesso 1 %{model}"
         other: "Excluiu com sucesso %{count} %{plural_model}"
@@ -75,8 +75,7 @@ pt-BR:
       errors:
         empty_text: "O comentário não foi salvo porque o texto estava vazio."
 
-
-# Formtastic
+  # Formtastic
   formtastic:
     actions:
       create: "Novo %{model}"

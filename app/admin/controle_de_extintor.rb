@@ -15,8 +15,8 @@ filter :numero_interno
 filter :tecnico
 filter :tipo_de_embarcacao
 filter :tipo
-filter :proxima_recarga, :label => "Próx. Recarga"
-filter :created_at, :label => "Vistoriado em"
+filter :proxima_recarga, :label => "Próx. Recarga", as: :date_time_range
+filter :created_at, :label => "Vistoriado em", as: :date_time_range
 
 
 controller do

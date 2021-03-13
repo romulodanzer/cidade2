@@ -91,3 +91,9 @@ gem "paperclip", "~> 6.1"
 gem "kaminari", "~> 1.2"
 
 gem "font-awesome-sass", "~> 5.15"
+
+
+
+gem "active_admin_datetimepicker", "~> 0.7.4"
+
+gem "puma_worker_killer", "~> 0.3.1"

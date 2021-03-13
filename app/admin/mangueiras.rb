@@ -11,11 +11,11 @@ scope :este_mes
 filter :embarcacao
 filter :fabricante
 filter :localizacao
-filter :teste_hidrostatico
+filter :teste_hidrostatico, as: :date_time_range
 filter :tipo
 filter :tecnico
-filter :proxima_recarga, :label => "Próx. Recarga"
-filter :created_at, :label => "Vistoriado em"
+filter :proxima_recarga, :label => "Próx. Recarga", as: :date_time_range
+filter :created_at, :label => "Vistoriado em", as: :date_time_range
 
 controller do
  def index
@@ -43,8 +43,8 @@ end
 column :teste_hidrostatico do |t|
 	t.teste_hidrostatico.strftime('%d/%m/%Y') if !t.teste_hidrostatico.nil?
 end
-column "Compr.",:comprimento
-column :diametro
+#column "Compr.",:comprimento
+#column :diametro
 column :tipo
 column "Itens",:created_at, :sortable => :created_at do |t|
         div do
