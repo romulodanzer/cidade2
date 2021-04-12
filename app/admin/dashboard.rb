@@ -8,7 +8,7 @@ ActiveAdmin.register_page "Dashboard" do
     columns do
       column do
         panel "Registros Por Técnico" do
-          render "layouts/sesmt" 
+          #render "layouts/sesmt" 
         end
       end
       column do
