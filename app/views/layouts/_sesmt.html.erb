@@ -69,7 +69,8 @@ input[type="number"] {
 
 <% @data = [] %>
 <% for e in @tecnicos %>
-   <% @data << "{name: '#{e}' , y: #{@boia_ante.where(:tecnico => e).count + @mangueiras_ante.where(:tecnico => e).count + @hidrantes_ante.where(:tecnico => e).count + @extintores_ante.where(:tecnico => e).count + @extintores_atu.where(:tecnico => e).count + @hidrantes_atu.where(:tecnico => e).count + @mangueiras_atu.where(:tecnico => e).count + @boia_atu.where(:tecnico => e).count}, sliced: true}" %>
+   <% @tmp2 = @boia_ante.where(:tecnico => e).count + @mangueiras_ante.where(:tecnico => e).count + @hidrantes_ante.where(:tecnico => e).count + @extintores_ante.where(:tecnico => e).count + @extintores_atu.where(:tecnico => e).count + @hidrantes_atu.where(:tecnico => e).count + @mangueiras_atu.where(:tecnico => e).count + @boia_atu.where(:tecnico => e).count %>
+   <% @data << "{name: '#{e}' , y: #{@tmp2}, sliced: true}" %>
 <% end %>
 
 <figure class="highcharts-figure">
