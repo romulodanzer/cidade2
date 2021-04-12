@@ -69,8 +69,8 @@ input[type="number"] {
 
 <% @data2 = [] %>
 <% for e in @embarcacoes %>
-    <% if @extintores_atu.where(:embarcacao => e).count + @hidrantes_atu.where(:embarcacao => e).count + @mangueiras_atu.where(:embarcacao => e).count + @boia_atu.where(:embarcacao => e).count > 0 %>
-        <% @data2 << "{name: '#{e}' , y: #{@extintores_atu.where(:embarcacao => e).count + @hidrantes_atu.where(:embarcacao => e).count + @mangueiras_atu.where(:embarcacao => e).count + @boia_atu.where(:embarcacao => e).count}, sliced: true}" %>
+    <% if @boia_ante.where(:embarcacao => e).count + @mangueiras_ante.where(:embarcacao => e).count + @hidrantes_ante.where(:embarcacao => e).count + @extintores_ante.where(:embarcacao => e).count + @extintores_atu.where(:embarcacao => e).count + @hidrantes_atu.where(:embarcacao => e).count + @mangueiras_atu.where(:embarcacao => e).count + @boia_atu.where(:embarcacao => e).count > 0 %>
+    <% @data2 << "{name: '#{e}' , y: #{@boia_ante.where(:embarcacao => e).count + @mangueiras_ante.where(:embarcacao => e).count + @hidrantes_ante.where(:embarcacao => e).count + @extintores_ante.where(:embarcacao => e).count + @extintores_atu.where(:embarcacao => e).count + @hidrantes_atu.where(:embarcacao => e).count + @mangueiras_atu.where(:embarcacao => e).count + @boia_atu.where(:embarcacao => e).count}, sliced: true}" %>
     <% end %>
 <% end %>
 
@@ -81,7 +81,7 @@ input[type="number"] {
 <figure class="highcharts-figure">
     <div id="container2"></div> 
     <p class="highcharts-description">
-        Para este gráfico foram inspecionado(ss): <%= @embarcacoes.count %> embarcaçõoes.
+        Para este gráfico foram inspecionado(as): <%= @data2.count %> embarções.
     </p>
 </figure>
 
@@ -99,7 +99,7 @@ input[type="number"] {
         text: 'Itens Verificados por Embarcação'
     },
     tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}% {point.y} itens</b>'
     },
     accessibility: {
         point: {
