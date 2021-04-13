@@ -7,6 +7,7 @@ class Mangueira < ActiveRecord::Base
   scope :feito_hoje, -> { where("created_at > ?", Date.today.at_beginning_of_day) }
   scope :ultima_semana, -> { where("created_at > ?", Date.today-7.days) }
   scope :este_mes, -> { where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) }
-
+  scope :mangueiras_atu, -> { where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) }
+  scope :mangueiras_ante, ->  { where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) }
 
 end

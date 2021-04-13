@@ -1,7 +1,7 @@
-<script src="https://code.highcharts.com/highcharts.js"></script>
+<!--<script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script> 
 
 
 
@@ -45,31 +45,24 @@ input[type="number"] {
 	min-width: 50px;
 }</style>
 
+-->
 
-<% @extintores_atu = ControleDeExtintor.where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) %>
-<% @hidrantes_atu = Hidrante.where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) %>
-<% @mangueiras_atu = Mangueira.where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) %>
-<% @boia_atu = Boia.where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) %>
-<% @extintores_ante = ControleDeExtintor.where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) %>
-<% @hidrantes_ante = Hidrante.where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) %>
-<% @mangueiras_ante = Mangueira.where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) %>
-<% @boia_ante = Boia.where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) %>
 <% embarcacao = [] %>
-<% @extintores_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
-<% @hidrantes_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
-<% @mangueiras_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
-<% @boia_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
-<% @extintores_ante.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
-<% @hidrantes_ante.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
-<% @mangueiras_ante.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
-<% @boia_ante.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
+<% ControleDeExtintor.extintores_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
+<% Hidrante.hidrantes_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
+<% Mangueira.mangueiras_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
+<% Boia.boia_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
+<% ControleDeExtintor.extintores_ante.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
+<% Hidrante.hidrantes_ante.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
+<% Mangueira.mangueiras_ante.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
+<% Boia.boia_ante.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
 <% @embarcacoes = embarcacao.uniq %>
-<% @estemes = @extintores_atu.count + @hidrantes_atu.count + @mangueiras_atu.count + @boia_atu.count %>
-<% @mespassado = @extintores_ante.count + @hidrantes_ante.count + @mangueiras_ante.count + @boia_ante.count  %>
+<% @estemes = ControleDeExtintor.extintores_atu.count + Hidrante.hidrantes_atu.count + Mangueira.mangueiras_atu.count + Boia.boia_atu.count %>
+<% @mespassado = ControleDeExtintor.extintores_ante.count + Hidrante.hidrantes_ante.count + Mangueira.mangueiras_ante.count + Boia.boia_ante.count  %>
 
 <% @data2 = [] %>
 <% for e in @embarcacoes %>
-    <% @tmp = @boia_ante.where(:embarcacao => e).count + @mangueiras_ante.where(:embarcacao => e).count + @hidrantes_ante.where(:embarcacao => e).count + @extintores_ante.where(:embarcacao => e).count + @extintores_atu.where(:embarcacao => e).count + @hidrantes_atu.where(:embarcacao => e).count + @mangueiras_atu.where(:embarcacao => e).count + @boia_atu.where(:embarcacao => e).count %>
+    <% @tmp = Boia.boia_ante.where(:embarcacao => e).count + Mangueira.mangueiras_ante.where(:embarcacao => e).count + Hidrante.hidrantes_ante.where(:embarcacao => e).count + ControleDeExtintor.extintores_ante.where(:embarcacao => e).count + ControleDeExtintor.extintores_atu.where(:embarcacao => e).count + Hidrante.hidrantes_atu.where(:embarcacao => e).count + Mangueira.mangueiras_atu.where(:embarcacao => e).count + Boia.boia_atu.where(:embarcacao => e).count %>
     <% if @tmp > 0 %>
     <% @data2 << "{name: '#{e}' , y: #{@tmp}, sliced: true}" %>
     <% end %>
