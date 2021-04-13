@@ -14,7 +14,7 @@ filter :localizacao
 filter :teste_hidrostatico, as: :date_time_range
 filter :tipo
 filter :tecnico
-filter :proxima_recarga, :label => "Próx. Recarga", as: :date_time_range
+filter :proxima_recarga#, :label => "Próx. Recarga", as: :date_time_range
 filter :created_at, :label => "Vistoriado em", as: :date_time_range
 
 controller do

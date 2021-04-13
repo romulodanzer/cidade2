@@ -46,7 +46,14 @@ input[type="number"] {
 }</style>
 
 
-
+<% @extintores_atu = ControleDeExtintor.where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) %>
+<% @hidrantes_atu = Hidrante.where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) %>
+<% @mangueiras_atu = Mangueira.where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) %>
+<% @boia_atu = Boia.where("created_at > ? and created_at < ?",Date.today.at_beginning_of_month, Date.today.at_end_of_month) %>
+<% @extintores_ante = ControleDeExtintor.where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) %>
+<% @hidrantes_ante = Hidrante.where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) %>
+<% @mangueiras_ante = Mangueira.where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) %>
+<% @boia_ante = Boia.where("created_at > ? and created_at < ?",(Date.today-1.month).at_beginning_of_month, (Date.today-1.month).at_end_of_month) %>
 <% embarcacao = [] %>
 <% @extintores_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
 <% @hidrantes_atu.group(:embarcacao).each do |t|  embarcacao << t.embarcacao.upcase end %>
