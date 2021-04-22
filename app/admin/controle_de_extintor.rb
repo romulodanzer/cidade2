@@ -86,7 +86,7 @@ column "Cap.", :capacidade
 column "Itens",:difusor, :sortable => :difusor do |t|
 	div do
 	if t.tipo == "PQS"
-		status_tag("Difusor" + "N/A", class: 'warning')
+		''
 	else
 		case t.difusor
 		when 'N/A'
