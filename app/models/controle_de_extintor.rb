@@ -27,7 +27,7 @@ class ControleDeExtintor < ActiveRecord::Base
 
           extintor = ControleDeExtintor.find_or_create_by!(numero_do_registro: row["Selo do In Metro"],
                                                         embarcacao: row["Embacarcao"],
-                                                        tipo_de_embarcacao: "BM",
+                                                        tipo_de_embarcacao: "BT",
                                                         tipo: row["Tipo"],
                                                         numero_interno: row["N do Extintor"],
                                                         setor: row["Localizacao"],

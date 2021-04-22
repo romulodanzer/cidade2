@@ -42,7 +42,7 @@ class Boia < ActiveRecord::Base
         end
 
         boia = Boia.find_or_create_by!(embarcacao: row["Embacarcao"],
-            tipo_de_embarcacao: "BM",
+            tipo_de_embarcacao: "BT",
             tipo: row["TIPO"],
             n_de_serie: row["N de serie"],
             fabricacao: row["Data de Fabricacao"],

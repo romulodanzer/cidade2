@@ -85,17 +85,21 @@ column "Próx. Recarga",:proxima_recarga, :sortable => :proxima_recarga do |v|
 column "Cap.", :capacidade
 column "Itens",:difusor, :sortable => :difusor do |t|
 	div do
-	case t.difusor
-	when 'N/A'
-	  status_tag("Difusor" + t.difusor, class: 'warning')
-	when 'N/C'
-	  status_tag("Difusor" + t.difusor, class: 'error')
-  when 'OK'
-	 status_tag("Difusor" + t.difusor, class: 'ok')
-  when 'OK'
-   status_tag("Difusor" + t.difusor, class: 'ok')
+	if t.tipo == "PQS"
+		status_tag("Difusor" + "N/A", class: 'warning')
 	else
-	  ''
+		case t.difusor
+		when 'N/A'
+		status_tag("Difusor" + t.difusor, class: 'warning')
+		when 'N/C'
+		status_tag("Difusor" + t.difusor, class: 'error')
+		when 'OK'
+			status_tag("Difusor" + t.difusor, class: 'ok')
+		when 'OK'
+		status_tag("Difusor" + t.difusor, class: 'ok')
+		else
+		''
+		end
 	end
 
 	case t.gatilho
